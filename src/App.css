@@ -1,0 +1,73 @@
+
+/*  -- App theme -- */
+:root{
+	--primary: #9146ff;
+	--primary-dark: #7313ff;
+	--primary-light: #ede0ff;
+	--light: #f6f0ff;
+	--dark: #292037;
+	--black: #121014;
+}
+
+body {
+    font-family: 'Fira Sans', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.app-logo{
+	font-family: 'Fira Sans', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6{
+	font-family: 'Signika', serif;
+	font-weight: 600;
+}
+
+/* links */
+a{
+    color: var(--primary-dark);
+    transition: color ease 0.35s;
+}
+a:hover{
+    color: var(--dark);
+    text-decoration: underline;
+}
+a.link-button:hover{
+    text-decoration: none;
+}
+
+input:focus, textarea:focus, select:focus{
+    outline-color: var(--primary);
+}
+
+
+/* animation */
+.loading-icon{
+    animation: rotating 2s linear infinite;
+}
+@keyframes rotating {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+/* mobile only */
+@media (max-width: 480px) {
+    .Toastify__toast-container {
+        width: 90%;
+    }
+    .Toastify__toast-container--bottom-right {
+        bottom: 4rem;
+        right: 1rem;
+    }
+}
+
+/* tablet and up */
+/* @media (min-width: 768px) {
+    
+} */
