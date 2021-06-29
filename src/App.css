@@ -1,19 +1,39 @@
 
 /*  -- App theme -- */
-:root{
+/* :root{
 	--primary: #9146ff;
 	--primary-dark: #7313ff;
 	--primary-light: #ede0ff;
-	--light: #f6f0ff;
+    --light: #f9f5ff;
 	--dark: #292037;
 	--black: #121014;
-}
 
-body {
+    --card-bg: #fff;
+    --border-radius: 0.5rem;
+} */
+
+.App{
     font-family: 'Fira Sans', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    background: var(--light);
+    color: var(--dark);
+
+    display:flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main{
+    display:flex;
+    flex-grow: 1;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+footer{
+    border-top: 1px dashed gray;
 }
 
 .app-logo{
@@ -27,7 +47,7 @@ h1, h2, h3, h4, h5, h6{
 
 /* links */
 a{
-    color: var(--primary-dark);
+    color: var(--primary);
     transition: color ease 0.35s;
 }
 a:hover{
@@ -38,10 +58,51 @@ a.link-button:hover{
     text-decoration: none;
 }
 
+/* inputs */
+input{
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    color: var(--dark);
+}
 input:focus, textarea:focus, select:focus{
     outline-color: var(--primary);
 }
 
+/* buttons */
+button:disabled{
+    background: var(--primary-light) !important;
+    color: #555 !important;
+    border-color: #ccc !important;
+}
+
+.MuiButtonBase-root.MuiButton-root.MuiButton-text.btn-primary,
+.MuiButtonBase-root.MuiButton-root.MuiButton-contained.btn-primary{
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+    color: white;
+}
+
+.MuiButtonBase-root.MuiButton-root.MuiButton-outlined.btn-primary{
+    background-color: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.MuiButtonBase-root.MuiButton-root.MuiButton-text.btn-primary:hover,
+.MuiButtonBase-root.MuiButton-root.MuiButton-contained.btn-primary:hover,
+.MuiButtonBase-root.MuiButton-root.MuiButton-outlined.btn-primary:hover{
+    background-color: var(--primary-dark);
+    color: var(--primary-light);
+    border: 1px solid var(--primary);
+
+}
+
+/* swiper */
+.swiper-container{
+    width: 100%;
+    padding-bottom: 1rem !important;
+}
 
 /* animation */
 .loading-icon{
@@ -59,7 +120,7 @@ input:focus, textarea:focus, select:focus{
 /* mobile only */
 @media (max-width: 480px) {
     .Toastify__toast-container {
-        width: 90%;
+        max-width: 90%;
     }
     .Toastify__toast-container--bottom-right {
         bottom: 4rem;
