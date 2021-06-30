@@ -21,10 +21,12 @@ SwiperCore.use([Pagination, Autoplay]);
 
 // render routes
 import ROUTES, {RenderRoutes} from './routes';
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
+import useWindowDimensions from "@/hooks/useWindowDimensions";
 // components
-import TheFooter from './features/_shared_/TheFooter';
+import TheNavbar from '@/features/_shared_/TheNavbar';
+import TheFooter from '@/features/_shared_/TheFooter';
 
 // style
 import { createGlobalStyle } from 'styled-components';
@@ -48,11 +50,12 @@ const GlobalStyles = createGlobalStyle`
 
 function App() {
 	const { pathname } = useLocation();
-    
+	const navigate = useNavigate();
 	const authState = useSelector(state => state.authentication);
     const authDispatch = useDispatch();
 
-	const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+	const {width, height} = useWindowDimensions();
+	// const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
     // scroll to top on load
     useEffect(() => {
@@ -65,32 +68,23 @@ function App() {
 	// auth
     useEffect(() => {
         // console.log('app token: ', authState.token);
-        if(authState.token){
-            setIsUserLoggedIn(true);
-        }else{
-            setIsUserLoggedIn(false);
+        if(!authState.token){
+            navigate('/login');
         }
         
     }, [authState.token])
 
-	function logoutUser(){
-		console.log('loggin out...');
-		authDispatch(LOGOUT());
-	}
 
 	return (		
 		<div className="App">
 			<GlobalStyles />
 
-			<h3>{authState.name}</h3>
-			<Button onClick={logoutUser} variant="text" color="default">
-				logout
-			</Button>
-			<main>
-				
-				{/* route */}
-				<RenderRoutes userLoggedIn={isUserLoggedIn} routes={ROUTES}></RenderRoutes>
-
+			{
+				authState.token && <TheNavbar windowWidth={width} />
+			}
+			
+			<main className="app-container">	
+				<RenderRoutes />				
 			</main>
 
 			<TheFooter />
