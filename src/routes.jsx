@@ -1,36 +1,64 @@
 import React from "react";
-import Home from "./screens/Home";
+import Home from "@/screens/Home";
 
-// import Search from "./screens/Search";
-import Login from "./screens/Login";
-import Signup from "./screens/Signup";
-// import Profile from "./screens/Profile";
-// import About from "./screens/About";
-// import BugReport from './screens/BugReport';
-// import Acknowledgements from "./screens/Acknowledgements";
-// import PageNotFound from './screens/PageNotFound';
+import Search from "@/screens/Search";
+import Login from "@/screens/Login";
+import Signup from "@/screens/Signup";
+import Profile from "@/screens/Profile";
+import AddPost from "@/features/posts/AddPost";
+// import BugReport from '@/screens/BugReport';
+// import Acknowledgements from "@/screens/Acknowledgements";
+// import PageNotFound from '@/screens/PageNotFound';
 
 import {useRoutes, Navigate} from 'react-router-dom';
 
-const ROUTES = (isAuthenticated) => [
+const ROUTES = () => [
     {
-        path: "/",
-        key: "Home",
+        path: "/addpost",
+        key: "AddPost",
         end: true,
-        exact: true,
-        element: isAuthenticated ? <Home /> : <Navigate to="/login" /> 
+        element: <AddPost />
+    },
+    {
+        path: "/profile",
+        key: "Profile",
+        end: true,
+        element: <Profile />
+        // element: isAuthenticated ? <Profile /> : <Navigate to="/login" />
+    },
+    {
+        path: "/search",
+        key: "Search",
+        end: true,
+        // element: isAuthenticated ? <Search /> : <Navigate to="/login" />
+        element: <Search />
     },
     {
         path: "/login",
         key: "Login",
         end: true,
-        element: isAuthenticated ? <Navigate to="/" /> : <Login/>, 
+        element: <Login/>,
+        // element: isAuthenticated ? <Navigate to="/" /> : <Login/>,
     },
     {
         path: "/signup",
         key: "Signup",
         end: true,
-        element: isAuthenticated ? <Navigate to="/" /> : <Signup/>, 
+        element: <Signup/>,
+        // element: isAuthenticated ? <Navigate to="/" /> : <Signup/>, 
+    },
+    
+    {
+        path: "/",
+        key: "Home",
+        end: true,
+        element: <Home />
+        // element: isAuthenticated ? <Home /> : <Navigate to="/login" />,
+        // children: [
+        //     { path: '/addpost', element: <AddPost /> },
+        //     { path: ':id', element: <UserProfile /> },
+        //     { path: 'me', element: <OwnUserProfile /> },
+        // ]
     },
     // {
     //     path: "/video/:videoId",
@@ -94,9 +122,9 @@ const ROUTES = (isAuthenticated) => [
     // },  
 ];
 
-export function RenderRoutes({ userLoggedIn, routes }) {
+export function RenderRoutes() {
     // useRoutes to render routes object - alternative to Routes & Route of react-router-dom
-    let selectedRoute = useRoutes(ROUTES(userLoggedIn));
+    let selectedRoute = useRoutes(ROUTES());
     // console.log('select: ', selectedRoute);
     return selectedRoute;
 }
