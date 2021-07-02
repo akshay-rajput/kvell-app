@@ -20,7 +20,7 @@ const ROUTES = () => [
         element: <AddPost />
     },
     {
-        path: "/profile",
+        path: "/profile/:userId",
         key: "Profile",
         end: true,
         element: <Profile />
