@@ -10,7 +10,8 @@ export default defineConfig({
           {find: "@", replacement: path.resolve(__dirname, 'src')},
           {find: "@/features", replacement: path.resolve(__dirname, 'src/features')},
           {find: "@/hooks", replacement: path.resolve(__dirname, 'src/hooks')},
-          {find: "@/screens", replacement: path.resolve(__dirname, 'src/screens')}
+          {find: "@/screens", replacement: path.resolve(__dirname, 'src/screens')},
+          {find: "@/utils", replacement: path.resolve(__dirname, 'src/utils')}
         ],
   }
 })
