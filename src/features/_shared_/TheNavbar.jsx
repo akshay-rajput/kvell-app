@@ -34,7 +34,7 @@ const AppNavbar = styled.nav`
             position:fixed;
             bottom: 0;
             width: 100%;
-            z-index: 3;
+            z-index: 4;
             background: var(--light);
             border-bottom: none;
             border-top: 1px solid var(--primary-light); 
@@ -89,7 +89,7 @@ export default function TheNavbar({windowWidth}) {
                         </li>
 
                         <li>
-                            <NavLink end to="/profile" className="flex items-center profile-pic">
+                            <NavLink end to={"/profile/"+authState.userId} className="flex items-center profile-pic">
                                 {/* <small className="">{JSON.stringify(authState)}</small> */}
                                 {
                                     authState.userAvatar ? 
