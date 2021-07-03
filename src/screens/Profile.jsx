@@ -46,9 +46,13 @@ export default function Profile() {
                 profileState.status ==="Fulfilled" && 
                 <div className="">
                     <div className="button-group flex-grow flex justify-end gap-x-2 items-end">
-                        <Link to="/" className="link-button flex items-center p-2 text-xs md:text-sm">
-                            <MdSettings className="mr-1" /> Edit Profile
-                        </Link>
+                        {
+                            authState.userId === profileState.userData._id ? 
+                            <Link to="/profile/edit" className="link-button flex items-center p-2 text-xs md:text-sm">
+                                <MdSettings className="mr-1" /> Edit Profile
+                            </Link>
+                            : null
+                        }
                         <button className="text-purple-700 hover:text-yellow-500 p-2 text-xs md:text-sm" onClick={logoutUser}>
                             Logout
                         </button>
