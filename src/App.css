@@ -29,15 +29,31 @@
 main{
     display:flex;
     flex-grow: 1;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
 }
 footer{
     border-top: 1px dashed gray;
 }
 
+.app-navbar-logo{
+    font-family: 'Signika', serif;
+    font-size: 1.5rem;
+    color: var(--primary);
+    transition: color ease 0.35s;
+    position: sticky;
+}
+.app-navbar-logo:hover{
+    color: var(--accent);
+    text-decoration: none;
+}
 .app-logo{
 	font-family: 'Fira Sans', sans-serif;
+}
+.app-container{
+    width: 95%;
+    max-width: 1024px;
+    margin: auto;
 }
 
 h1, h2, h3, h4, h5, h6{
@@ -51,7 +67,7 @@ a{
     transition: color ease 0.35s;
 }
 a:hover{
-    color: var(--dark);
+    color: var(--accent);
     text-decoration: underline;
 }
 a.link-button:hover{
@@ -59,7 +75,7 @@ a.link-button:hover{
 }
 
 /* inputs */
-input{
+input, textarea{
     border-radius: 0.5rem;
     border: 1px solid #ccc;
     padding: 0.5rem;
@@ -119,11 +135,17 @@ button:disabled{
 
 /* mobile only */
 @media (max-width: 480px) {
+
+    .app-navbar-logo{
+        font-size: 1.25rem;
+    }
+
     .Toastify__toast-container {
-        max-width: 90%;
+        max-width: 90% !important;
+        border-radius: var(--border-radius) !important;
     }
     .Toastify__toast-container--bottom-right {
-        bottom: 4rem;
+        bottom: 4rem !important;
         right: 1rem;
     }
 }
