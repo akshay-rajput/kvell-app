@@ -4,7 +4,7 @@ import { MdSearch } from 'react-icons/md';
 import {ImSpinner8} from 'react-icons/im';
 
 import nodataImage from '/nodata.svg';
-
+import {getUrl} from '@/utils/api.config';
 // import { useLocation } from 'react-router-dom';
 
 import axios from 'axios';
@@ -51,7 +51,8 @@ export default function Search() {
 
         console.log("searching.. ", searchQuery);
         try{
-            const response = await axios.get(`https://kvell-app.herokuapp.com/search?q=${searchQuery}`);
+            // const response = await axios.get(`https://kvell-app.herokuapp.com/search?q=${searchQuery}`);
+            const response = await axios.get(getUrl("search", {})+`?q=${searchQuery}`);
             console.log('response of search: ', response);
             
             let postsResults = response.data.posts;
