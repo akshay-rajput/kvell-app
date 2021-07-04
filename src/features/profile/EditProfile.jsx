@@ -1,8 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import styled from "styled-components";
 import {MdKeyboardArrowLeft, MdSave} from 'react-icons/md';
+
 import ErrorState from "@/features/_shared_/ErrorState";
-import { getUserData, getUserPosts, saveUserData } from '@/features/profile/profileSlice';
+import Avatar from '@/features/_shared_/userAvatar';
+import { getUserData, getUserPosts, saveUserData, updateProfileAvatar } from '@/features/profile/profileSlice';
+import {UPDATE_USER_AVATAR} from "@/features/authentication/authenticationSlice";
+
 import {useNavigate} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
@@ -20,6 +24,12 @@ const ProfileForm = styled.div`
         }
     }
 
+    .edit-avatar img{
+        height: 6rem;
+        width: 6rem;
+        object-fit: cover;
+    }
+
     form{
         background: var(--card-bg);
         border-radius: var(--border-radius);
@@ -31,10 +41,10 @@ const ProfileForm = styled.div`
             grid-template-columns: repeat(12, 1fr);
             margin-bottom: 2rem;
             column-gap: 0.5rem;
-            // align-items: center;
+            align-items: center;
 
             label{
-                padding-top: 0.1rem;
+                // padding-top: 0.1rem;
                 grid-column-start: span 4;
                 color: #aaa;
                 // grid-column-end: 4;
@@ -43,15 +53,37 @@ const ProfileForm = styled.div`
                 grid-column-start: span 8;
                 // grid-column-end: 12;
             }
+
+            .image-upload label{
+                color: var(--primary);
+                cursor: pointer;
+                
+                &:hover{
+                    color: orange;
+                }
+            }
+
         }
         
-        
+        .upload-blur{
+            position: absolute;
+            background: rgba(0,0,0,0.5);
+            width: 6rem;
+            height: 6rem;;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .upload-spinner{
+            position:absolute;
+            top: 44%;
+            right: 44%;
+            z-index: 2;
+            color: white;
+            // background: rgba(0,0,0,0.15);
+            
+        }
     }
 `;
-
-function saveProfile(){
-    console.log('saving...')
-}
 
 export default function EditProfile() {
     const authState = useSelector(state => state.authentication);
@@ -61,10 +93,12 @@ export default function EditProfile() {
     let navigate = useNavigate();
 
     useEffect(() => {
-        if((profileState.status == "Idle" && authState.token)){
-            dispatch(getUserData(authState.userId));
-            dispatch(getUserPosts(authState.userId));
-        }
+        (async function(){
+            if((profileState.status == "Idle" && authState.token)){
+                await dispatch(getUserData(authState.userId));
+                await dispatch(getUserPosts(authState.userId));
+            }
+        })();
         // when reloading prepopulate form
         setProfileData(initialFormState);
     }, [dispatch, profileState.status]);
@@ -76,6 +110,7 @@ export default function EditProfile() {
     }
 
     const [profileData, setProfileData] = useState(initialFormState);
+    const [changeAvatar, setChangeAvatar] = useState(false);
 
     async function saveProfile(event){
         event.preventDefault();
@@ -131,7 +166,7 @@ export default function EditProfile() {
                     links: newLinks
                 }
             }))
-            console.log('newLInk: ', newLinks);
+            // console.log('newLInk: ', newLinks);
         }
         else{
             setProfileData(prevState => ({
@@ -141,6 +176,87 @@ export default function EditProfile() {
                     [event.target.name]: event.target.value 
                 } 
             }))
+        }
+    }
+
+    async function updateAvatar(event){
+        if(event.target.files?.length > 0){
+            console.log('udpated avatar: ', event.target.files[0]);
+
+            setChangeAvatar(true);
+            // Create an object of formData
+            const formData = new FormData();
+            // Update the formData object
+            formData.append(
+                "image",
+                event.target.files[0]
+            );
+
+            try{
+                const {payload} = await dispatch(updateProfileAvatar(formData));
+
+                // make change reflect without reloading page
+                setProfileData(prevState => ({
+                    ...prevState,
+                    user: {
+                        ...prevState.user,
+                        avatarUrl: payload
+                    }
+                }))
+
+                // change in navbar
+                await dispatch(UPDATE_USER_AVATAR(payload));
+
+                setChangeAvatar(false);
+
+                // make changes in db
+                let updatedData = {...profileData.user};
+                updatedData.avatarUrl = payload;
+                await dispatch(saveUserData({userId: authState.userId, userData: updatedData}));
+
+            }
+            catch(err){
+                setChangeAvatar(false);
+                console.log('error while updating profile picture: ', err);
+                toast.error(`There was problem while updating profile.`, {
+                    position: toast.POSITION.BOTTOM_RIGHT
+                });
+            }
+        }
+        
+      // Details of the uploaded file
+    }
+    async function checkUploadResult(uploadError, uploadResult){
+        if (!uploadError && uploadResult && uploadResult.event === "success") { 
+            console.log('Done! Here is the image info: ', uploadResult.info);
+            
+            setProfileData(prevState => ({
+                ...prevState,
+                user: {
+                    ...prevState.user,
+                    avatarUrl: uploadResult.info.secureUrl
+                }
+            }))
+    
+            try{
+                // dispatch action to save profile
+                await dispatch(saveUserData({userId: authState.userId, userData: profileData.user}));
+            
+                toast.success(`Avatar updated successfully`, {
+                    position: toast.POSITION.BOTTOM_RIGHT
+                });
+            }
+            catch(error){
+                
+                toast.error(`There was a problem updating avatar`, {
+                    position: toast.POSITION.BOTTOM_RIGHT
+                });
+            }
+            // change image
+            // dispatch(updateProfileAvatar(uploadResult.info.secureUrl));
+        }
+        else{
+            console.log('Error uploading image: ', uploadError);
         }
     }
 
@@ -155,6 +271,34 @@ export default function EditProfile() {
                 profileState.status === "Fulfilled" && 
                 <div className="">
                     <form onSubmit={saveProfile} className=""> 
+                        <div className="input-group">
+                            <label htmlFor="">Avatar</label>
+                            <div className="image-upload col-span-8 flex">
+                                <label htmlFor="" className="">
+                                    {   
+                                        changeAvatar &&
+                                        <div className="upload-blur">
+                                            <ImSpinner8  className="upload-spinner loading-icon"/>
+                                        </div>
+                                    }
+                                </label>
+                                <label htmlFor="changeAvatar" disabled={changeAvatar} className="">
+                                    <span className="edit-avatar">
+                                        {    
+                                            profileData.user.avatarUrl ?
+                                            <Avatar avatarSize={"large"} avatarUrl={profileData.user.avatarUrl}/>
+                                            :
+                                            <Avatar avatarSize={"large"} avatarUrl={""}/>
+                                        }
+                                    </span>
+                                    {
+                                        changeAvatar ? "": "Change Image"
+                                    }
+                                </label>
+                                <input type="file" name="changeAvatar" id="changeAvatar" onChange={updateAvatar} className="hidden" />
+                            </div>
+                        </div>
+
                         <div className="input-group">
                             <label htmlFor="">Email</label>
                             <span className="user-email">{profileData.user.email}</span>
@@ -196,8 +340,6 @@ export default function EditProfile() {
                                 )
                             })
                         }
-
-
 
                         <div className="flex justify-end">
                             <Button type="submit" disabled={profileData.isSubmitting} variant="contained" className="btn-primary">
