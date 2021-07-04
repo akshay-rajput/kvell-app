@@ -22,7 +22,7 @@ const url_mapping = {
     removePost: "posts/:postId",
 
     search:"search",
-
+    fileUpload: "fileUpload",
     getAllUsers: "users",
     getUser: "users/:userId",
     updateUser: "users/:userId",
