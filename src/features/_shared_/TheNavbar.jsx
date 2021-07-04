@@ -25,6 +25,8 @@ const AppNavbar = styled.nav`
         ul li a.profile-pic{
             img{
                 width: 2rem;
+                height: 2rem;
+                object-fit: cover;
                 border: 1px solid var(--primary-light);
                 border-radius: 50%;
             }
