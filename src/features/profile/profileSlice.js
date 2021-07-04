@@ -28,6 +28,17 @@ export const saveUserData = createAsyncThunk("profile/saveUserData", async({user
     }
 })
 
+export const updateProfileAvatar = createAsyncThunk("profile/updateProfileAvatar", async(formData)=> {
+    try{
+        const response = await axios.post(getUrl("fileUpload", {}), formData);
+        
+        return response.data.imageUrl;
+    }
+    catch(error){
+        console.log('error uploading picture - ', error);
+        rejectWithValue(null);
+    }
+})
 
 export const getUserPosts = createAsyncThunk("profile/getUserPosts", async(userId) => {
     try{
@@ -77,6 +88,16 @@ export const profileSlice = createSlice({
             state.status = "Fulfilled";
         },
         [saveUserData.rejected] : (state, action) => {
+            state.status = "Rejected"
+        },
+
+        // update profile avatar
+        [updateProfileAvatar.fulfilled] : (state, action) => {
+            // avatar is updated when update profile is dispatched
+            // state.userData.avatarUrl = action.payload;
+            state.status = "Fulfilled";
+        },
+        [updateProfileAvatar.rejected] : (state, action) => {
             state.status = "Rejected"
         },
 
