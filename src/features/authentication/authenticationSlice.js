@@ -19,6 +19,11 @@ export const authenticationSlice = createSlice({
     name: 'authentication',
     initialState : userInfo,
     reducers: {
+        UPDATE_USER_AVATAR: (state, action) => {
+            console.log('actionPassed: ', action);
+            localStorage.setItem('userAvatar', action.payload);
+            state.userAvatar = action.payload;
+        },
         LOGIN: (state, action) => {
             console.log('actionPassed: ', action);
             state.userId = action.payload.id;
@@ -45,6 +50,6 @@ export const authenticationSlice = createSlice({
     }
 })
 
-export const { LOGIN, LOGOUT } = authenticationSlice.actions;
+export const { LOGIN, LOGOUT, UPDATE_USER_AVATAR } = authenticationSlice.actions;
 
 export default authenticationSlice.reducer;
