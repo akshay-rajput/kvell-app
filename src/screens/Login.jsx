@@ -223,7 +223,7 @@ export default function Login() {
                 <form onSubmit={loginUser}>
                     <label className="flex flex-col mb-4 text-sm text-gray-400 mb1">
                         Email
-                        <input type="email" id="user_email" name="email" value={loginData.email} onChange={handleInputChange}
+                        <input inputMode={"email"} type="email" id="user_email" name="email" value={loginData.email} onChange={handleInputChange}
                                 autoComplete="true" placeholder="abc@example.com" className="" required/>    
                     </label>
 

@@ -6,9 +6,12 @@ import {ImSpinner8} from 'react-icons/im';
 import nodataImage from '/nodata.svg';
 import {getUrl} from '@/utils/api.config';
 // import { useLocation } from 'react-router-dom';
+import PostCard from '@/features/posts/PostCard';
+import UserCard from '../features/search/UserCard';
 
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { nanoid } from '@reduxjs/toolkit';
 
 const SearchBar = styled.div`
     {
@@ -130,7 +133,7 @@ export default function Search() {
         <div className="flex flex-col w-full">
             <SearchBar className="mx-auto">
                 <form className="flex items-center" onSubmit={doSearch}>
-                    <input type="search" placeholder="Search.." onChange={handleInputChange} value={searchQuery} required />
+                    <input inputMode={"search"} type="search" placeholder="Search.." onChange={handleInputChange} value={searchQuery} required />
                     <button type="submit">
                         {
                             searchState.loading ? 
@@ -165,25 +168,32 @@ export default function Search() {
                 {
                     searchQuery !== '' && results.users.length > 0 || results.posts.length > 0 ?
                     <div className="">
-                        <h4 className="text-gray-400 font-normal">Showing <strong>{results.users.length + results.posts.length}</strong> results for {searchQuery}</h4> 
+                        <h4 className=" mb-4 text-gray-400 font-normal">Showing <strong>{results.users.length + results.posts.length}</strong> results for {searchQuery}</h4> 
                         
-                        {
-                            results.users.length > 0 && results.users.map(user => {
-                                return(
-                                    <p className="">{user.name}</p>
-                                )
-                            })
-                        }
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {
+                                results.users.length > 0 && results.users.map(user => {
+                                    return(
+                                        <div key={nanoid()} className="">
+                                            <UserCard user={user} />
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
 
-                        <hr />
-
-                        {
-                            results.posts.length > 0 && results.posts.map(post => {
-                                return(
-                                    <p className="">{post.content}</p>
-                                )
-                            })
-                        }
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {
+                                results.posts.length > 0 && results.posts.map(post => {
+                                    return(
+                                        <div key={nanoid()} className="">
+                                            <PostCard post={post}/>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                        
                     </div>
                     :
                     null
