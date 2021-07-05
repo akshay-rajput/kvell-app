@@ -2,8 +2,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { getUrl } from '@/utils/api.config';
 
-export const getUserData = createAsyncThunk("profile/getUserData", async(userId) => {
+export const getUserData = createAsyncThunk("profile/getUserData", async({userId, calledBy}) => {
     try{
+        // console.count('called GetUserData - ');
+        // console.log('called by: ', calledBy);
         const response = await axios.get(getUrl("getUser", {userId}));
         console.log('response of getUser: ', response);
         return response.data.user;
