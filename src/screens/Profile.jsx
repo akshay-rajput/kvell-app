@@ -23,14 +23,19 @@ export default function Profile() {
 
     useEffect(() => {
         // fetch data when store empty or if stored profile doesn't match userid in url
-        if((profileState.userData._id !== userId)){
-            dispatch(getUserData(userId));
-            dispatch(getUserPosts(userId));
-        }
-        if((profileState.status == "Idle" && authState.token)){
-            dispatch(getUserData(userId));
-            dispatch(getUserPosts(userId));    
-        }
+        (async function(){
+            // avoid multiple calls if already loading
+            if((profileState.userData._id !== userId && profileState.status !== "Loading")){
+                await dispatch(getUserData({userId, calledBy: "userId different"}));
+                await dispatch(getUserPosts(userId));
+            }
+            
+            // incase refreshing your own profile page
+            if(( (profileState.userData._id == userId) && profileState.status == "Idle" && authState.token)){
+                await dispatch(getUserData({userId, calledBy: "status was idle"}));
+                await dispatch(getUserPosts(userId));    
+            }
+        })();
     }, [dispatch, profileState.status, userId]);
 
     function logoutUser(){
@@ -62,7 +67,7 @@ export default function Profile() {
                         <div className="">
                             <Avatar avatarSize={"large"} avatarUrl={profileState.userData.avatarUrl} />
                         </div>
-                        <div className="">
+                        <div className="flex-grow">
                             <UserProfileInfo userData={profileState.userData} />
                         </div>    
                     </div>
@@ -81,7 +86,7 @@ export default function Profile() {
                                 profileState.userPosts.length > 0 ? 
                                 profileState.userPosts.map(post => {
                                     return (
-                                        <UserPostCard postData={post} userInfo={profileState.userData} />
+                                        <UserPostCard key={post._id} postData={post} userInfo={profileState.userData} />
                                     )
                                 })
                                 :
