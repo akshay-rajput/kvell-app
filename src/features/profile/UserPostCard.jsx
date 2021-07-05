@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Avatar from "@/features/_shared_/UserAvatar";
 import {Link} from 'react-router-dom';
+import { nanoid } from '@reduxjs/toolkit';
 import {FaRegComment, FaRegHeart, FaHeart} from 'react-icons/fa';
 
 const PostCard = styled.div`
@@ -43,11 +44,23 @@ export default function UserPostCard({postData, userInfo}) {
 
             <hr className="mt-2"/>
 
-            <p className="p-2 post-content text-sm text-gray-700">
+            <div className="p-2 post-content text-sm text-gray-700">
                 {postData.content}
                 <br />
                 {postData.images.length > 0 && <img src={postData.images[0].imageUrl} alt="post image" className="my-2" />}
-            </p>
+                <br />
+                <div className="flex items-center gap-x-2">
+                    {
+                        postData.hashtags?.length > 0 && postData.hashtags?.map(tag => {
+                            return (
+                                <span key={nanoid()} className="py-1 px-2 bg-purple-100 text-purple-900 rounded">
+                                    #{tag}
+                                </span>
+                            )
+                        })
+                    }
+                </div>
+            </div>
 
             <hr />
 
