@@ -1,12 +1,28 @@
 import React from 'react';
+import {useDispatch, useSelector} from "react-redux";
 import {GrFacebook, GrInstagram, GrLinkedin, GrTwitter} from "react-icons/gr";
 import {FaExternalLinkAlt, FaBirthdayCake, FaMapMarkerAlt} from 'react-icons/fa';
+import FollowButton from '@/features/_shared_/FollowButton';
+
 export default function UserProfileInfo({userData}) {
-    
+    const authState = useSelector(state => state.authentication);
+    const {followers} = useSelector(state => state.follow);
     return (
         <div className="p-2 md:px-4 md:py-2">
-            <h3 className="text-gray-600 text-xl mb-1">{userData.name}</h3>
-            <h3 className="text-gray-600 text-md mb-1">@{userData.username}</h3>
+            <div className="flex justify-between">
+                <div className="">
+                    <h3 className="text-gray-600 text-xl mb-1">{userData.name}</h3>
+                    <h3 className="text-gray-600 text-md mb-1">@{userData.username}</h3>
+                </div>
+
+                {
+                    authState.userId !== userData._id ?
+                    <div className="">
+                        <FollowButton followUserId={userData._id} listOfFollowers={followers} />
+                    </div>
+                    : null
+                }
+            </div>
             <p className="text-gray-500 text-sm">
                 {userData.bio}
             </p>
