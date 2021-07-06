@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {MdKeyboardArrowLeft, MdSave} from 'react-icons/md';
 
 import ErrorState from "@/features/_shared_/ErrorState";
-import Avatar from '@/features/_shared_/userAvatar';
+import Avatar from '@/features/_shared_/UserAvatar';
 import { getUserData, getUserPosts, saveUserData, updateProfileAvatar } from '@/features/profile/profileSlice';
 import {UPDATE_USER_AVATAR} from "@/features/authentication/authenticationSlice";
 
