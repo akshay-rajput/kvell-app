@@ -5,6 +5,7 @@ import Search from "@/screens/Search";
 import Login from "@/screens/Login";
 import Signup from "@/screens/Signup";
 import Profile from "@/screens/Profile";
+import PostDetail from "@/screens/PostPage";
 import AddPost from "@/features/posts/AddPost";
 import EditProfile from "@/features/profile/EditProfile";
 // import BugReport from '@/screens/BugReport';
@@ -19,6 +20,11 @@ const ROUTES = () => [
         key: "AddPost",
         end: true,
         element: <AddPost />
+    },
+    {
+        path: "/posts/:postId",
+        key: "PostPage",
+        element: <PostDetail />
     },
     {
         path: "/profile/edit",
