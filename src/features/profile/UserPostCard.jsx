@@ -74,11 +74,11 @@ export default function UserPostCard({postData, userInfo}) {
                     <div className="flex items-center text-xl gap-x-1">
                         <FaHeart className="text-red-500" />
                         <FaRegHeart className="text-red-500"/>
-                        <small className="ml-1">{postData.comments.length}</small>
+                        <small className="ml-1">{postData.likes.length > 0 ? postData.likes.length : ""}</small>
                     </div>
                     <Link to={"/posts/"+postData._id} className="flex text-xl items-center gap-x-1">
                         <FaRegComment /> 
-                        <small className="ml-1">{postData.comments.length}</small>
+                        <small className="ml-1">{postData.comments.length > 0 ? postData.comments.length : ""}</small>
                     </Link>
                 </div>
 
