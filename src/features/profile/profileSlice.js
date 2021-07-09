@@ -44,10 +44,16 @@ export const updateProfileAvatar = createAsyncThunk("profile/updateProfileAvatar
 
 export const getUserPosts = createAsyncThunk("profile/getUserPosts", async(userId) => {
     try{
-        const response = await axios.get(getUrl("getAllPosts", {}));
-        console.log('allPosts: ', response.data.posts);
-        let userPosts = response.data.posts.filter(post => post.publisher === userId);
-        return userPosts;
+        // const response = await axios.get(getUrl("getAllPosts", {}));
+        const response = await axios.get(getUrl("getHomeFeed", {}), {
+            headers: {
+                userid: userId
+            }
+        });
+        // console.log('response -- userPosts: ', response.data);
+        return response.data.posts;
+        // let userPosts = response.data.posts.filter(post => post.publisher === userId);
+        // return userPosts;
     }
     catch(error){
         console.log('error during getUserPosts: ', error);
