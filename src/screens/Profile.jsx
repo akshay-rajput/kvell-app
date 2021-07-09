@@ -11,6 +11,7 @@ import UserFollowerSection from '@/features/followers/FollowerSection';
 import {LOGOUT} from '@/features/authentication/authenticationSlice';
 import { getUserData, getUserPosts, resetProfile } from '@/features/profile/profileSlice';
 import {resetFollowerData} from '@/features/followers/followersSlice';
+import {resetFeed} from '@/features/feed/feedSlice';
 import {ImSpinner8} from "react-icons/im";
 import {MdSettings} from "react-icons/md";
 
@@ -42,6 +43,7 @@ export default function Profile() {
 		console.log('loggin out...');
 		dispatch(LOGOUT());
         dispatch(resetProfile());
+        dispatch(resetFeed());
         dispatch(resetFollowerData());
 	}
 
