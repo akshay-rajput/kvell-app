@@ -4,13 +4,13 @@ import authenticationReducer from '@/features/authentication/authenticationSlice
 // import notificationReducer from "@/features/posts/notificationSlice";
 import profileReducer from "@/features/profile/profileSlice";
 import followerReducer from "@/features/followers/followersSlice";
-// import feedReducer from "@/features/posts/feedSlice";
+import feedReducer from "@/features/feed/feedSlice";
 
 export default configureStore({
     reducer: {
         authentication: authenticationReducer,
         // posts: postReducer,
-        // feeds: feedReducer,
+        feed: feedReducer,
         profile: profileReducer,
         follow: followerReducer,
         // notifications: notificationReducer,
