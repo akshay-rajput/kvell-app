@@ -18,7 +18,7 @@ export default function UserFeed(){
         return () => {
             console.log('unmount userfeed');
         }
-    }, [])
+    }, [authState.token]);
     
     return(
         <>
