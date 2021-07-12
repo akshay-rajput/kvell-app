@@ -1,24 +1,10 @@
-import React, {useState, useEffect} from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {getGeneralFeed} from '@/features/feed/feedSlice';
+import React from "react";
+import { useSelector } from "react-redux";
 import PostCard from '@/features/posts/PostCard';
 import {ImSpinner8} from 'react-icons/im';
 
 export default function GeneralFeed(){
     const {generalFeed, generalFeedStatus} = useSelector(state => state.feed);
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        (async function(){
-            console.log('genstatus; ', generalFeedStatus);
-            if((generalFeedStatus == "Idle")){
-                await dispatch(getGeneralFeed());    
-            }
-        })();
-        return () => {
-            console.log('unmount generalfeed');
-        }
-    }, []);
     
     return(
         <>
