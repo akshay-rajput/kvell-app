@@ -4,7 +4,7 @@ import { getUrl } from "../../utils/api.config";
 
 // thunks
 export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {dispatch}) => {
-    console.log('getting userFeed:', userId);
+    // console.log('getting userFeed:', userId);
     try{
         const response = await axios.get(getUrl("getHomeFeed", {}), {
             headers: {
@@ -14,17 +14,20 @@ export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {d
         });
         console.log('response of getFeed: ', response);
 
-        let flatUserFeed = response.data.posts.flat(2);
-        console.log('flatfeed: ', flatUserFeed);
+        let userFeedPostIds = [];
+        if(response.data.posts.length > 0){
+            userFeedPostIds = response.data.posts.map(post => {
+                return post._id;
+            })
+        }
 
         // get general feed if user feed is less than 10 posts
-        let userFeedPostIds = flatUserFeed.map(post => {
-            return post._id;
-        })
-        // get community posts
-        await dispatch(getGeneralFeed(userFeedPostIds));
+        if(response.data.posts.length > 0 && response.data.posts.length < 10){
+            // get community posts
+            await dispatch(getGeneralFeed(userFeedPostIds));
+        }
 
-        return flatUserFeed;
+        return response.data.posts;
     }
     catch(error){
         console.log('error during getUSerFeed - ', error.message);
@@ -39,9 +42,13 @@ export const getGeneralFeed = createAsyncThunk("feed/getGeneralFeed", async(user
         // console.log('response of GenFeed: ', response);
 
         const allPosts = response.data.posts;
-        let otherFeed = allPosts.filter(post => {
-            return !userFeedPostIds.includes(post._id);
-        })
+        let otherFeed = allPosts;
+
+        if(userFeedPostIds && userFeedPostIds.length > 0){
+            otherFeed = allPosts.filter(post => {
+                return !userFeedPostIds.includes(post._id);
+            })
+        }
         console.log('others: ', otherFeed);
         return otherFeed;
     }
@@ -63,7 +70,11 @@ const feedSlice = createSlice({
     name: "feed",
     initialState: initialFeed,
     reducers: {
-        resetFeed: state => initialFeed
+        resetFeed: state => initialFeed,
+        addPostToFeed: (state, action) => {
+            // console.log('add to feed: ', action.payload);
+            state.userFeed.unshift(action.payload);
+        }
     },
     extraReducers: {
         [getUserFeed.pending] : (state, action) => {
@@ -91,6 +102,6 @@ const feedSlice = createSlice({
     }
 });
 
-export const { resetFeed } = feedSlice.actions;
+export const { resetFeed, addPostToFeed } = feedSlice.actions;
 
 export default feedSlice.reducer;
