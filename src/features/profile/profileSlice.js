@@ -74,7 +74,11 @@ export const profileSlice = createSlice({
     name: 'profile',
     initialState : initialProfile,
     reducers: {
-        resetProfile: state => initialProfile
+        resetProfile: state => initialProfile,
+        addPostToProfile: (state, action) => {
+            // console.log('add to profile: ', action.payload);
+            state.userPosts.unshift(action.payload);
+        }
     },
     extraReducers:{
         [getUserData.pending] : (state, action) => {
@@ -124,6 +128,6 @@ export const profileSlice = createSlice({
     }
 })
 
-export const { resetProfile } = profileSlice.actions;
+export const { resetProfile, addPostToProfile } = profileSlice.actions;
 
 export default profileSlice.reducer;
