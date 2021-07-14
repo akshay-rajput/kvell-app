@@ -8,6 +8,7 @@ import Profile from "@/screens/Profile";
 import PostDetail from "@/screens/PostPage";
 import AddPost from "@/features/posts/AddPost";
 import EditProfile from "@/features/profile/EditProfile";
+import Notifications from "@/screens/Notifications";
 // import BugReport from '@/screens/BugReport';
 // import Acknowledgements from "@/screens/Acknowledgements";
 // import PageNotFound from '@/screens/PageNotFound';
@@ -45,6 +46,13 @@ const ROUTES = () => [
         end: true,
         // element: isAuthenticated ? <Search /> : <Navigate to="/login" />
         element: <Search />
+    },
+    {
+        path: "/notifications",
+        key: "Notifications",
+        end: true,
+        // element: isAuthenticated ? <Search /> : <Navigate to="/login" />
+        element: <Notifications />
     },
     {
         path: "/login",
