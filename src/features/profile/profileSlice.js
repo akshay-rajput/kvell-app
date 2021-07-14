@@ -78,6 +78,20 @@ export const profileSlice = createSlice({
         addPostToProfile: (state, action) => {
             // console.log('add to profile: ', action.payload);
             state.userPosts.unshift(action.payload);
+        },
+        updatePostInProfile: (state, action) => {
+            // find the post
+            let post = action.payload;
+            // console.log('post to update: ', post);
+
+            // check in user feed
+            let indexInUserPosts = state.userPosts.findIndex(element => element._id === post._id);
+
+            // if in userfeed update the post
+            if(indexInUserPosts > -1){
+                state.userPosts[indexInUserPosts] = post;
+            }
+            // console.log('post in user Feed: ', indexInUserFeed);
         }
     },
     extraReducers:{
@@ -128,6 +142,6 @@ export const profileSlice = createSlice({
     }
 })
 
-export const { resetProfile, addPostToProfile } = profileSlice.actions;
+export const { resetProfile, addPostToProfile, updatePostInProfile } = profileSlice.actions;
 
 export default profileSlice.reducer;
