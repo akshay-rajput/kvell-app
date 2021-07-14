@@ -1,10 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import Avatar from "@/features/_shared_/UserAvatar";
+import {checkIfLiked} from '@/utils/checkIfLiked';
+import { updatePost } from './PostSlice';
+import { updatePostInFeed } from '@/features/feed/feedSlice';
+import { updatePostInProfile } from '@/features/profile/profileSlice';
+
 import {Link} from 'react-router-dom';
-import { nanoid } from '@reduxjs/toolkit';
-import { parseISO, formatDistanceToNow } from 'date-fns'
+import { nanoid } from '@reduxjs/toolkit';import { formatDistanceToNow } from 'date-fns'
 import {FaRegComment, FaRegHeart, FaHeart} from 'react-icons/fa';
+import { useSelector, useDispatch } from 'react-redux';
 
 const PostCardDiv = styled.div`
     border: 1px solid var(--primary-light);
@@ -12,7 +17,11 @@ const PostCardDiv = styled.div`
     border-radius: var(--border-radius);
 
     .post-content{
-        min-height: 4rem;
+        // min-height: 4rem;
+        
+        .post-text{
+            white-space: pre-wrap;
+        }
 
         img{
             max-width: 350px;
@@ -28,11 +37,66 @@ const PostCardDiv = styled.div`
 `;
 
 export default function PostCard({post}) {
+    const authState = useSelector((state) => state.authentication);
+    const dispatch = useDispatch();
+
+    let isThisPostLiked = checkIfLiked(post.likes, authState.userId);
+
+    // useEffect(() => {
+    //     console.log("post mount: ", post._id);
+    //     return () => {
+    //         console.count('post unmount -- ');
+    //     }
+    // }, [post]);
+
+    async function likePostClicked(){
+        // console.log('liked..');
+
+        let clonedPost = JSON.parse(JSON.stringify(post));
+
+        try{
+            // if already liked, unlike it
+            if(isThisPostLiked){
+                let updatedLikes = clonedPost.likes.filter(like => like.likedByUser._id !== authState.userId);
+                // console.log("unlike: ", updatedLikes);
+                clonedPost.likes = updatedLikes;
+                // console.log('updatedLikes: ', clonedPost.likes);
+            }
+            else{
+                let like = {
+                    likedByUser: {
+                        _id: authState.userId,
+                        avatarUrl: authState.userAvatar,
+                        name: authState.name,
+                        username: authState.username
+                    }
+                }
+
+                // console.log('likes: ', clonedPost.likes);
+                clonedPost.likes.push(like);
+            }
+
+            // update local state
+            await dispatch(updatePostInFeed(clonedPost));
+
+            // update in db
+            await dispatch(updatePost({
+                updatedPost: clonedPost,
+                postId: clonedPost._id
+            }));
+            
+            await dispatch(updatePostInProfile(clonedPost));
+        }
+        catch(error){
+            console.log('error in postcard: ', error.message);
+        }
+    }
+
     return (
         <PostCardDiv>
             <div className="post-toprow flex items-center">
                 <div>
-                    <Avatar avatarSize={"medium"} avatarUrl={post.publisher.avatarUrl} />
+                    <Avatar avatarSize={"medium"} avatarUrl={post.publisher.avatarUrl ? post.publisher.avatarUrl: "" } />
                 </div>
                 <div className="flex items-end flex-grow justify-between">
                     <div className="px-2">
@@ -50,7 +114,7 @@ export default function PostCard({post}) {
             <hr className="mt-2"/>
 
             <div className="p-2 post-content text-sm text-gray-700">
-                <p>{post.content}</p>
+                <p className="post-text">{post.content}</p>
                 {post.images.length > 0 && <img src={post.images[0].imageUrl} alt="post image" className="my-2 rounded" />} 
                 <br />
                 <div className="flex items-center gap-x-2">
@@ -71,22 +135,27 @@ export default function PostCard({post}) {
             <div className="p-2 flex justify-between items-center">
                 <div className="flex gap-x-6">
                     
-                    <div className="flex items-center text-xl gap-x-1">
-                        <FaHeart className="text-red-500" />
-                        <FaRegHeart className="text-red-500"/>
-                        <small className="ml-1">{post.likes.length > 0 ? post.likes.length : ""}</small>
-                    </div>
-                    <Link to={"/posts/"+post._id} className="flex items-center text-xl gap-x-1">
+                    <button type="button" onClick={likePostClicked} className="flex items-center text-xl gap-x-1">
+                        {
+                            isThisPostLiked
+                            ?
+                            <FaHeart className="text-red-500" />
+                            :
+                            <FaRegHeart className="text-red-500"/>
+                        }
+                        <small className="ml-1 text-sm">{post.likes.length > 0 ? post.likes.length : ""}</small>
+                    </button>
+                    <Link to={"/posts/"+post._id} className="flex items-center link-button text-xl gap-x-1">
                         <FaRegComment /> 
-                        <small className="ml-1">{post.comments.length > 0 ? post.comments.length : ""}</small>
+                        <small className="ml-1 text-sm">{post.comments.length > 0 ? post.comments.length : ""}</small>
                     </Link>
                 </div>
 
-                <small className="text-gray-400">
+                {/* <small className="text-gray-400">
                     {new Date(post.createdAt).toDateString()} 
                     <span className="mx-2">&bull;</span>
                     {new Date(post.createdAt).toLocaleTimeString()}
-                </small>
+                </small> */}
             </div>
         </PostCardDiv>
     )

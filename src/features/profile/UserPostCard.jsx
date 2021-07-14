@@ -1,9 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import Avatar from "@/features/_shared_/UserAvatar";
+import { updatePostInProfile } from '@/features/profile/profileSlice';
+import {checkIfLiked} from '@/utils/checkIfLiked';
+import { updatePost } from '@/features/posts/PostSlice';
+import { updatePostInFeed } from '@/features/feed/feedSlice';
+
 import {Link} from 'react-router-dom';
 import { nanoid } from '@reduxjs/toolkit';
+import { formatDistanceToNow } from 'date-fns'
 import {FaRegComment, FaRegHeart, FaHeart} from 'react-icons/fa';
+import { useSelector, useDispatch } from 'react-redux';
 
 const PostCard = styled.div`
     border: 1px solid var(--primary-light);
@@ -11,8 +18,12 @@ const PostCard = styled.div`
     border-radius: var(--border-radius);
 
     .post-content{
-        min-height: 4rem;
-
+        // min-height: 4rem;
+        
+        .post-text{
+            white-space: pre-wrap;
+        }
+        
         img{
             max-width: 350px;
             border-radius: var(--border-radius);
@@ -27,6 +38,55 @@ const PostCard = styled.div`
 `;
 
 export default function UserPostCard({postData, userInfo}) {
+    const authState = useSelector((state) => state.authentication);
+    const dispatch = useDispatch();
+
+    let isThisPostLiked = checkIfLiked(postData.likes, authState.userId);
+
+    async function likePostClicked(){
+        // console.log('liked..');
+
+        let clonedPost = JSON.parse(JSON.stringify(postData));
+
+        try{
+            // if already liked, unlike it
+            if(isThisPostLiked){
+                let updatedLikes = clonedPost.likes.filter(like => like.likedByUser._id !== authState.userId);
+                // console.log("unlike: ", updatedLikes);
+                clonedPost.likes = updatedLikes;
+                // console.log('updatedLikes: ', clonedPost.likes);
+            }
+            else{
+                let like = {
+                    likedByUser: {
+                        _id: authState.userId,
+                        avatarUrl: authState.userAvatar,
+                        name: authState.name,
+                        username: authState.username
+                    }
+                }
+
+                // console.log('likes: ', clonedPost.likes);
+                clonedPost.likes.push(like);
+            }
+
+            // update local state
+            await dispatch(updatePostInProfile(clonedPost));
+
+            // update in db
+            await dispatch(updatePost({
+                updatedPost: clonedPost,
+                postId: clonedPost._id
+            }));
+
+            await dispatch(updatePostInFeed(clonedPost));
+
+        }
+        catch(error){
+            console.log('error in postcard: ', error.message);
+        }
+    }
+
     return (
         <PostCard className="p-2 shadow-sm mb-8">
             <div className="post-toprow flex items-center">
@@ -41,7 +101,7 @@ export default function UserPostCard({postData, userInfo}) {
                         </h4>
                     </div>
                     <span className="text-xs tracking-wide leading-4 text-gray-400 px-2">
-                        {formatDistanceToNow(new Date(post.createdAt)) + " ago"}
+                        {formatDistanceToNow(new Date(postData.createdAt)) + " ago"}
                     </span>
                 </div>
             </div>
@@ -49,7 +109,7 @@ export default function UserPostCard({postData, userInfo}) {
             <hr className="mt-2"/>
 
             <div className="p-2 post-content text-sm text-gray-700">
-                <p className="">{postData.content}</p>
+                <p className="post-text">{postData.content}</p>
                 <br />
                 {postData.images.length > 0 && <img src={postData.images[0].imageUrl} alt="post image" className="my-2" />}
                 <br />
@@ -71,22 +131,27 @@ export default function UserPostCard({postData, userInfo}) {
             <div className="p-2 flex justify-between items-center">
                 <div className="flex gap-x-6">
                     
-                    <div className="flex items-center text-xl gap-x-1">
-                        <FaHeart className="text-red-500" />
-                        <FaRegHeart className="text-red-500"/>
-                        <small className="ml-1">{postData.likes.length > 0 ? postData.likes.length : ""}</small>
-                    </div>
+                    <button type="button" onClick={likePostClicked} className="flex items-center text-xl gap-x-1">
+                        {
+                            isThisPostLiked
+                            ?
+                            <FaHeart className="text-red-500" />
+                            :
+                            <FaRegHeart className="text-red-500"/>
+                        }
+                        <small className="ml-1 text-sm">{postData.likes.length > 0 ? postData.likes.length : ""}</small>
+                    </button>
                     <Link to={"/posts/"+postData._id} className="flex text-xl items-center gap-x-1">
                         <FaRegComment /> 
-                        <small className="ml-1">{postData.comments.length > 0 ? postData.comments.length : ""}</small>
+                        <small className="ml-1 text-sm">{postData.comments.length > 0 ? postData.comments.length : ""}</small>
                     </Link>
                 </div>
 
-                <small className="text-gray-400">
+                {/* <small className="text-gray-400">
                     {new Date(postData.createdAt).toDateString()} 
                     <span className="mx-2">&bull;</span>
                     {new Date(postData.createdAt).toLocaleTimeString()}
-                </small>
+                </small> */}
             </div>
         </PostCard>
     )
