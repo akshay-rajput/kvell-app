@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
-import { getUrl } from "../../utils/api.config";
+import { getUrl } from "@/utils/api.config";
 
 // thunks
 export const createPost = createAsyncThunk("feed/createPost", async({postData, image}, {dispatch, getState}) => {
@@ -62,9 +62,31 @@ export const uploadImage = createAsyncThunk("post/uploadImage", async(formData)=
     }
 })
 
-// addLike
+// update post - like or comment
+export const updatePost = createAsyncThunk("post/updatePost", async ({updatedPost, postId}) => {
+    try{
+        const response = await axios.post(getUrl("updatePost", {postId}), updatedPost);
+        console.log('updated post: ', response.data);
+        return response.data.post;
+    }
+    catch(err){
+        console.log("Error updating post: ", err.message);
+        rejectWithValue(null);
+    }
+})
 
-// addComment
+// get the post
+export const getPost = createAsyncThunk("post/getPost", async (postId) => {
+    try{
+        const response = await axios.get(getUrl("getPost", {postId}) );
+        console.log('fetched post: ', response.data);
+        return response.data.post;
+    }
+    catch(err){
+        console.log("Error getting post: ", err.message);
+        rejectWithValue(null);
+    }
+})
 
 // slice
 const initialPostData = {
@@ -76,7 +98,11 @@ const postSlice = createSlice({
     name: "post",
     initialState: initialPostData,
     reducers: {
-        resetPost: state => initialPostData
+        resetPost: state => initialPostData,
+        // updatePostInSlice: (state, action) => {
+        //     // if in userfeed update the post
+        //     state.post = action.payload;
+        // }
     },
     extraReducers: {
         [createPost.pending] : (state, action) => {
@@ -90,20 +116,35 @@ const postSlice = createSlice({
             state.status = "Rejected";
         },
 
+        // update
+        [updatePost.fulfilled] : (state, action) => {
+            state.post = action.payload;
+            state.status = "Fulfilled";
+        },
+
         [uploadImage.pending] : (state, action) => {
             state.status = "Loading";
         },
-        // [uploadImage.fulfilled] : (state, action) => {
-        //     state.userFeed = action.payload;
-        //     state.status = "Fulfilled";
-        // },
         [uploadImage.rejected] : (state, action) => {
+            state.status = "Rejected";
+        },
+
+        [getPost.pending] : (state, action) => {
+            state.status = "Loading";
+        },
+        [getPost.fulfilled] : (state, action) => {
+            console.log('action of getPOst: ', action.payload);
+            state.post = action.payload;
+            state.status = "Fulfilled";
+            console.log('updated state: ', state.post);
+        },
+        [getPost.rejected] : (state, action) => {
             state.status = "Rejected";
         },
 
     }
 });
 
-export const { resetFeed } = postSlice.actions;
+export const { resetPost, updatePostInSlice } = postSlice.actions;
 
 export default postSlice.reducer;
