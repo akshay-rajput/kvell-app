@@ -4,7 +4,7 @@ import './App.css';
 
 import React, { useState, useEffect } from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {LOGIN, LOGOUT} from '@/features/authentication/authenticationSlice';
+import {getNotificationsForUser} from '@/features/notifications/notificationSlice';
 
 import { ToastContainer, Slide} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -52,18 +52,22 @@ function App() {
 	const { pathname } = useLocation();
 	const navigate = useNavigate();
 	const authState = useSelector(state => state.authentication);
-    const authDispatch = useDispatch();
+	const notificationState = useSelector(state => state.notifications);
+    const dispatch = useDispatch();
 
 	const {width, height} = useWindowDimensions();
 	// const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
 
     // scroll to top on load
-    useEffect(() => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    }, [pathname]);
+    // useEffect(() => {
+	// 	console.log('pathname: ', pathname);
+    //     if(pathname !== "/"){
+	// 		window.scrollTo({
+	// 			top: 0,
+	// 			behavior: "smooth"
+	// 		});
+	// 	}
+    // }, [pathname]);
 
 	// auth
     useEffect(() => {
@@ -71,6 +75,14 @@ function App() {
         if(!authState.token){
             navigate('/login');
         }
+		else{
+			// get notifications for user
+			(async () => {
+				if(notificationState.status==="Idle"){
+					await dispatch(getNotificationsForUser(authState.userId));
+				}
+			})();
+		}
         
     }, [authState.token])
 
