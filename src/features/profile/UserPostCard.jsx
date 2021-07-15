@@ -5,6 +5,7 @@ import { updatePostInProfile } from '@/features/profile/profileSlice';
 import {checkIfLiked} from '@/utils/checkIfLiked';
 import { updatePost } from '@/features/posts/PostSlice';
 import { updatePostInFeed } from '@/features/feed/feedSlice';
+import { createNewNotification } from '@/features/notifications/notificationSlice';
 
 import {Link} from 'react-router-dom';
 import { nanoid } from '@reduxjs/toolkit';
@@ -80,6 +81,20 @@ export default function UserPostCard({postData, userInfo}) {
             }));
 
             await dispatch(updatePostInFeed(clonedPost));
+
+            // send notification if not liking own post
+            console.log("checking to send notif: ", clonedPost.publisher._id +' -- auth: ', authState.userId);
+            if((authState.userId !== clonedPost.publisher._id) && !isThisPostLiked){
+                let notificationData = {
+                    postId: clonedPost._id,
+                    notificationType: "Like",
+                    markedAsRead: false,
+                    notificationTo: clonedPost.publisher._id,
+                    notificationFrom: authState.userId
+                }
+
+                await dispatch(createNewNotification(notificationData));
+            }
 
         }
         catch(error){

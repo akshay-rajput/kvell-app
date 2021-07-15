@@ -10,6 +10,7 @@ import {Link} from 'react-router-dom';
 import { nanoid } from '@reduxjs/toolkit';import { formatDistanceToNow } from 'date-fns'
 import {FaRegComment, FaRegHeart, FaHeart} from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
+import { createNewNotification } from '@/features/notifications/notificationSlice';
 
 const PostCardDiv = styled.div`
     border: 1px solid var(--primary-light);
@@ -86,6 +87,20 @@ export default function PostCard({post}) {
             }));
             
             await dispatch(updatePostInProfile(clonedPost));
+
+            // send notification if liking someone else's post
+            console.log("checking to send notif: ", clonedPost.publisher._id +' -- auth: ', authState.userId);
+            if((authState.userId !== clonedPost.publisher._id) && !isThisPostLiked){
+                let notificationData = {
+                    postId: clonedPost._id,
+                    notificationType: "Like",
+                    markedAsRead: false,
+                    notificationTo: clonedPost.publisher._id,
+                    notificationFrom: authState.userId
+                }
+
+                await dispatch(createNewNotification(notificationData));
+            }
         }
         catch(error){
             console.log('error in postcard: ', error.message);

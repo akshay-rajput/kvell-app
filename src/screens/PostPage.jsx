@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updatePost } from '@/features/posts/PostSlice';
 import { updatePostInFeed } from '@/features/feed/feedSlice';
 import { updatePostInProfile } from '@/features/profile/profileSlice';
+import { createNewNotification } from '@/features/notifications/notificationSlice';
 
 import styled from "styled-components";
 import {MdKeyboardArrowLeft} from 'react-icons/md';
@@ -30,6 +31,7 @@ const PostComment = styled.div`
     border: 1px solid var(--primary-light);
     background: var(--card-bg);
     padding: 0.1rem;
+    z-index: 1;
 
     input.comment-input{
         font-size: 0.75rem;
@@ -45,6 +47,17 @@ const PostComment = styled.div`
         padding: 0.5rem;
         border-radius: var(--border-radius);
     }
+
+    &::before{
+        content: '';
+        position: absolute;
+        right: 0;
+        z-index: 1;
+        top: -1rem;
+        height: 1rem;
+        width: 100%;
+        // background: black;
+        background: linear-gradient(180deg, rgba(194,224,255,0) 0%, var(--light) 51%);}
 `;
 
 export default function PostPage() {
@@ -98,6 +111,21 @@ export default function PostPage() {
             // update local state
             await dispatch(updatePostInFeed(clonedPost));
             await dispatch(updatePostInProfile(clonedPost));
+
+            // send notification if not commenting on own post
+            console.log("checking to send notif: ", clonedPost.publisher._id +' -- auth: ', authState.userId);
+            if(authState.userId !== clonedPost.publisher._id){
+                let notificationData = {
+                    postId: clonedPost._id,
+                    notificationType: "Comment",
+                    markedAsRead: false,
+                    notificationTo: clonedPost.publisher._id,
+                    notificationFrom: authState.userId
+                }
+
+                await dispatch(createNewNotification(notificationData));
+            }
+
         }
         catch(error){
             console.log('error adding comment: ', error.message);
@@ -126,7 +154,7 @@ export default function PostPage() {
                         status == "Rejected" ?
                         <ErrorState />
                         :
-                        <div className="post-container">
+                        <div className="post-container relative">
                             {
                                 (post._id === postId) &&
                                 <PostCard post={post}/>
@@ -138,9 +166,9 @@ export default function PostPage() {
                                 null
                             }
 
-                            <PostComment className="add-comment flex items-center">
+                            <PostComment className="add-comment relative flex items-center">
                                 <Avatar avatarSize={"small"} avatarUrl={authState.userAvatar} />
-                                <form onSubmit={addComment} className="flex flex-grow">
+                                <form onSubmit={addComment} className="flex flex-grow bg-white">
                                     <input type="text" onChange={onCommentChange} value={comment} 
                                             name="commentText" id="commentText" placeholder={"Comment as "+authState.name} 
                                             className="comment-input flex-grow" required/>
