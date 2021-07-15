@@ -32,6 +32,17 @@ const AppNavbar = styled.nav`
             }
         }
 
+        .unread-counter{
+            position: absolute;
+            top: 0rem;
+            right: 0rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 1px 4px;
+            border-radius: 50%;
+            font-size: 0.65rem;
+        }
+
         @media(max-width: 480px){
             position:fixed;
             bottom: 0;
@@ -51,6 +62,7 @@ const AppNavbar = styled.nav`
 
 export default function TheNavbar({windowWidth}) {
     const authState = useSelector(state => state.authentication);
+    const {unreadNotifications} = useSelector(state => state.notifications);
 
     return (
         <AppNavbar className="md:shadow-sm">
@@ -85,8 +97,12 @@ export default function TheNavbar({windowWidth}) {
                             null
                         }
                         <li>
-                            <NavLink end to="/notifications" className="flex items-center">
+                            <NavLink end to="/notifications" className="flex items-center relative">
                                 <MdNotificationsNone className="" />
+                                {
+                                    unreadNotifications > 0 &&
+                                    <span className="unread-counter">{unreadNotifications}</span>
+                                }
                             </NavLink>
                         </li>
 
