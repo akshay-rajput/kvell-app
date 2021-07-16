@@ -22,10 +22,13 @@ export default function UserFeed(){
     
     return(
         <>
-            <div className="user-feed-container">
+            <div className="user-feed-container flex flex-col flex-grow">
+                <h4 className="text-gray-400 text-lg mb-2">Your Feed</h4>
                 {
                     userFeedStatus == "Loading" ? 
-                    <ImSpinner8 className="loading-icon" /> 
+                    <div className="flex items-center justify-center h-24">
+                        <ImSpinner8 className="loading-icon text-purple-600 text-2xl" />
+                    </div> 
                     :
                     <div className="">
                         {
@@ -38,7 +41,10 @@ export default function UserFeed(){
                                 )
                             })
                             :
-                            <p className="rounded p-4 my-4 border border-gray-300">No custom posts</p>
+                            <p className="rounded py-4 px-2 mb-6 text-center text-xs text-gray-400 border border-gray-300">
+                                Your posts and the posts of people you follow will appear here.
+                                <br /> You can check out posts from our community below.
+                            </p>
                         }
                     </div>
                 }
