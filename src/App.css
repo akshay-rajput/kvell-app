@@ -75,7 +75,7 @@ a.link-button:hover{
 }
 
 ::-webkit-scrollbar {
-    width: 0.3rem;
+    width: 0.7rem;
 }
 
 ::-webkit-scrollbar-track {
@@ -152,6 +152,9 @@ button:disabled{
 
 /* mobile only */
 @media (max-width: 480px) {
+    ::-webkit-scrollbar {
+        width: 0.3rem;
+    }
 
     .app-navbar-logo{
         font-size: 1.25rem;
