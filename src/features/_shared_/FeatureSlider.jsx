@@ -23,11 +23,7 @@ const features = [
     },
     {
         title: "A place to share",
-        info: "Every new user gets their posts highlighted to encourage sharing."
-    },
-    {
-        title: "Earn badges",
-        info: "Earn badges for sharing posts & engaging with the community."
+        info: "Top contributors are given a special mention."
     },
     {
         title: "And much more",
