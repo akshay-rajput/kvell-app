@@ -9,7 +9,7 @@ import TopContributors from '@/features/feed/TopContributors';
 import useWindowDimensions from "@/hooks/useWindowDimensions";
 
 import { useSelector, useDispatch } from 'react-redux';
-import { updatePost } from '@/features/posts/PostSlice';
+import { updatePost } from '@/features/posts/postSlice';
 import { updatePostInFeed } from '@/features/feed/feedSlice';
 import { updatePostInProfile } from '@/features/profile/profileSlice';
 import { createNewNotification } from '@/features/notifications/notificationSlice';
