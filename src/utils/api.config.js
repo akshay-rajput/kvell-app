@@ -24,6 +24,7 @@ const url_mapping = {
     search:"search",
     fileUpload: "fileUpload",
     getAllUsers: "users",
+    getTopUsers: "users/top",
     getUser: "users/:userId",
     updateUser: "users/:userId",
     removeUser: "users/:userId"
