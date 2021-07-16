@@ -57,7 +57,7 @@ const notificationSlice = createSlice({
     name: "notifications",
     initialState: initialNotifications,
     reducers: {
-        resetNotification: state => initialNotifications,
+        resetNotifications: state => initialNotifications,
         // updatePostInSlice: (state, action) => {
         //     // if in userfeed update the post
         //     state.post = action.payload;
@@ -95,6 +95,8 @@ const notificationSlice = createSlice({
             })
             
             state.userNotifications = allUpdatedNotifications;
+
+            state.unreadNotifications = 0;
             state.statusOfNotificationUpdate = "Fulfilled";
         },
         [updateAllNotifications.rejected] : (state, action) => {

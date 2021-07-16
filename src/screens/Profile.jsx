@@ -12,9 +12,9 @@ import {LOGOUT} from '@/features/authentication/authenticationSlice';
 import { getUserData, getUserPosts, resetProfile } from '@/features/profile/profileSlice';
 import {resetFollowerData} from '@/features/followers/followersSlice';
 import {resetFeed} from '@/features/feed/feedSlice';
+import { resetNotifications } from '../features/notifications/notificationSlice';
 import {ImSpinner8} from "react-icons/im";
 import {MdSettings} from "react-icons/md";
-
 
 export default function Profile() {
     const authState = useSelector(state => state.authentication);
@@ -25,6 +25,7 @@ export default function Profile() {
     useEffect(() => {
         // fetch data when store empty or if stored profile doesn't match userid in url
         (async function(){
+            // console.count("called profile useeffect")
             // avoid multiple calls if already loading
             if((profileState.userData._id !== userId && profileState.status !== "Loading")){
                 await dispatch(getUserData({userId, calledBy: "userId different"}));
@@ -37,7 +38,7 @@ export default function Profile() {
                 await dispatch(getUserPosts(userId));    
             }
         })();
-    }, [dispatch, profileState.status, userId]);
+    }, [dispatch, userId]);
 
     function logoutUser(){
 		console.log('loggin out...');
@@ -45,6 +46,7 @@ export default function Profile() {
         dispatch(resetProfile());
         dispatch(resetFeed());
         dispatch(resetFollowerData());
+        dispatch(resetNotifications());
 	}
 
     return (
