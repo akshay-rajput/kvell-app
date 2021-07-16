@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import Avatar from "@/features/_shared_/UserAvatar";
 import {checkIfLiked} from '@/utils/checkIfLiked';
-import { updatePost } from './PostSlice';
+import { updatePost } from '@/features/posts/postSlice';
 import { updatePostInFeed } from '@/features/feed/feedSlice';
 import { updatePostInProfile } from '@/features/profile/profileSlice';
 

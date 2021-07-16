@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Avatar from "@/features/_shared_/UserAvatar";
 import { updatePostInProfile } from '@/features/profile/profileSlice';
 import {checkIfLiked} from '@/utils/checkIfLiked';
-import { updatePost } from '@/features/posts/PostSlice';
+import { updatePost } from '@/features/posts/postSlice';
 import { updatePostInFeed } from '@/features/feed/feedSlice';
 import { createNewNotification } from '@/features/notifications/notificationSlice';
 
