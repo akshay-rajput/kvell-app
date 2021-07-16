@@ -20,12 +20,13 @@ export const authenticationSlice = createSlice({
     initialState : userInfo,
     reducers: {
         UPDATE_USER_AVATAR: (state, action) => {
-            // console.log('actionPassed: ', action);
-            localStorage.setItem('userAvatar', action.payload);
+            let avatarUrl = `"${action.payload}"`;
+            // console.log('updateAvatar: ', action.payload);
+            localStorage.setItem('userAvatar', avatarUrl);
             state.userAvatar = action.payload;
         },
         LOGIN: (state, action) => {
-            // console.log('login: ', action);
+            console.log('login: ', action);
             state.userId = action.payload.id;
             state.name = action.payload.name;
             state.username = action.payload.name;
