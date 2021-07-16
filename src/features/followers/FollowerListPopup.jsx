@@ -30,7 +30,8 @@ const Popup = styled.div`
         position: relative;
         width: 90%;
         max-width: 400px;
-        height: 250px;
+        // height: 250px;
+        min-height: 200px;
         max-height: 500px;
         margin: 100px auto;
         z-index: 2;
@@ -61,13 +62,13 @@ export default function FollowerListPopup({ followerPopupData, closePopup }) {
             <div onClick={closePopup} className="modal_backdrop"></div>
 
             <div className="modal_dialog p-4 rounded-lg">
-                <h4>{followerPopupData.listType}</h4>
+                <h4>{followerPopupData.listType} <small className="text-gray-400">({followerPopupData.listOfProfiles.length})</small></h4>
 
-                <ul className="">
+                <ul className="overflow-auto">
                     {
                         followerPopupData.listOfProfiles.map(profile => {
                             return (
-                                <li className="my-2 border border-purple-200 rounded-lg shadow-sm p-1">
+                                <li key={profile.userId._id} className="my-2 border border-purple-200 rounded-lg shadow-sm p-1">
                                     {
                                         followerPopupData.listType === "Followers" ? 
                                         <div className="flex gap-x-2 justify-between items-center">
@@ -120,7 +121,6 @@ export default function FollowerListPopup({ followerPopupData, closePopup }) {
                     }
                     
                 </ul>
-
 
                 <button type="button" className="btn_close" onClick={closePopup}>
                     <MdClose />
