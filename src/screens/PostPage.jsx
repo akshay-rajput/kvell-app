@@ -5,6 +5,9 @@ import PostComments from '../features/posts/PostComments';
 import Avatar from '@/features/_shared_/UserAvatar';
 import ErrorState from "@/features/_shared_/ErrorState";
 import {getPost} from '@/features/posts/postSlice';
+import TopContributors from '@/features/feed/TopContributors';
+import useWindowDimensions from "@/hooks/useWindowDimensions";
+
 import { useSelector, useDispatch } from 'react-redux';
 import { updatePost } from '@/features/posts/PostSlice';
 import { updatePostInFeed } from '@/features/feed/feedSlice';
@@ -67,6 +70,7 @@ export default function PostPage() {
 
     const {postId} = useParams();
     const navigate = useNavigate();
+    const {width, height} = useWindowDimensions();
 
     const [comment, setComment] = useState("");
     const [isCommentBeingAdded, setIsCommentBeingAdded] = useState(false);
@@ -139,12 +143,14 @@ export default function PostPage() {
 
     return (
         <PostDetailPage className="w-full">
-            <div className="">
-                <button className="btn-back flex items-center" onClick={()=> navigate(-1)}>
-                    <MdKeyboardArrowLeft /> Back
-                </button>
+            <div className="grid grid-cols-5 gap-x-4 lg:gap-x-8 w-full mb-4">
+                <div className="col-span-5 md:col-span-3">
+                    <button className="btn-back flex items-center" onClick={()=> navigate(-1)}>
+                        <MdKeyboardArrowLeft /> Back
+                    </button>
+                </div>
                 
-                <div className="mt-4 mb-8">
+                <div className="col-span-5 md:col-span-3 mt-4 mb-8">
                     {
                         status == "Loading" ?
                         <div className="flex items-center justify-center h-24">
@@ -186,6 +192,13 @@ export default function PostPage() {
                         
                     }
                     
+                </div>
+
+                <div className="col-span-5 md:col-span-2 mt-4">
+                    {
+                        width >= 768 ?
+                        <TopContributors /> : null
+                    }
                 </div>
             </div>
         </PostDetailPage>
