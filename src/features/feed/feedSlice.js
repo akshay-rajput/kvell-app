@@ -22,7 +22,7 @@ export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {d
         }
 
         // get general feed if user feed is less than 10 posts
-        if(response.data.posts.length > 0 && response.data.posts.length < 10){
+        if(response.data.posts.length >= 0 && response.data.posts.length < 10){
             // get community posts
             await dispatch(getGeneralFeed(userFeedPostIds));
         }
@@ -58,12 +58,27 @@ export const getGeneralFeed = createAsyncThunk("feed/getGeneralFeed", async(user
     }
 })
 
+// get all users and find Top contributors
+export const getTopUsers = createAsyncThunk("feed/getTopUsers", async() => {
+    try{
+        const response = await axios.get( getUrl("getTopUsers", {}) );
+        console.log("top users: ", response.data.topUsers);
+        return response.data.topUsers;
+    }
+    catch(error){
+        console.log('error getting users: ', error.message);
+        rejectWithValue(null);
+    }
+})
+
 // slice
 const initialFeed = {
     userFeed: [],
     generalFeed: [],
+    topContributors: [],
     userFeedStatus: 'Idle',
     generalFeedStatus: 'Idle',
+    topContributorStatus: "Idle"
 };
 
 const feedSlice = createSlice({
@@ -117,6 +132,19 @@ const feedSlice = createSlice({
         [getGeneralFeed.rejected] : (state, action) => {
             state.generalFeedStatus = "Rejected";
         },
+    
+        // top contributors
+        [getTopUsers.pending] : (state, action) => {
+            state.topContributorStatus = "Loading";
+        },
+        [getTopUsers.fulfilled] : (state, action) => {
+            state.topContributors = action.payload;
+            state.topContributorStatus = "Fulfilled";
+        },
+        [getTopUsers.rejected] : (state, action) => {
+            state.topContributorStatus = "Rejected";
+        },
+    
     }
 });
 
