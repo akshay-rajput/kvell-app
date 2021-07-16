@@ -5,6 +5,7 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {getNotificationsForUser} from '@/features/notifications/notificationSlice';
+import {getTopUsers} from '@/features/feed/feedSlice';
 
 import { ToastContainer, Slide} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -53,6 +54,7 @@ function App() {
 	const navigate = useNavigate();
 	const authState = useSelector(state => state.authentication);
 	const notificationState = useSelector(state => state.notifications);
+	const {topContributors, topContributorStatus} = useSelector(state => state.feed);	
     const dispatch = useDispatch();
 
 	const {width, height} = useWindowDimensions();
@@ -80,6 +82,10 @@ function App() {
 			(async () => {
 				if(notificationState.status==="Idle"){
 					await dispatch(getNotificationsForUser(authState.userId));
+				}
+
+				if(topContributorStatus === "Idle"){
+					await dispatch(getTopUsers());
 				}
 			})();
 		}
