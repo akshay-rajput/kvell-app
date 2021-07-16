@@ -15,6 +15,7 @@ const AddPostDiv = styled.div`
     background: var(--card-bg);
     display:flex;
     flex-direction: column;
+    height: fit-content;
     padding: 1rem;
     textarea{
         width: 100%;
@@ -104,7 +105,7 @@ export default function AddPost() {
     }
 
     return (
-        <AddPostDiv className="mb-8">
+        <AddPostDiv className="mb-8 w-full">
             <form onSubmit={createNewPost}>
                 <textarea name="postContent" onChange={handleInputChange} value={postState.postContent} id="post_content" placeholder="What's on your mind?" rows="3" required></textarea>
                 {/* <input type="text" className="post-hash-tags" name="postHashtags" placeholder="Add hashtags (separated by commas)"  className="w-full"/> */}
