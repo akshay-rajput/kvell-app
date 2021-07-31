@@ -12,7 +12,7 @@
     <br />
     <a href="https://kvell.netlify.app/" target="_blank">View Demo</a>
     ·
-    <a href="https://github.com/akshay-rajput/watch.wisp/issues">Report Bug</a>
+    <a href="https://github.com/akshay-rajput/kvell-app/issues">Report Bug</a>
   </p>
 </p>
 
