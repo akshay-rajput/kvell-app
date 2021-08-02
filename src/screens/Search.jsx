@@ -1,16 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, Suspense} from 'react';
 import styled from 'styled-components';
 import { MdSearch } from 'react-icons/md';
 import {ImSpinner8} from 'react-icons/im';
 
 import nodataImage from '/nodata.svg';
 import {getUrl} from '@/utils/api.config';
-// import { useLocation } from 'react-router-dom';
-import PostCard from '@/features/posts/PostCard';
-import UserCard from '../features/search/UserCard';
+
+const PostCard = React.lazy(() => import('@/features/posts/PostCard'));
+const UserCard = React.lazy(() => import('@/features/search/UserCard'));
 
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { nanoid } from '@reduxjs/toolkit';
 
 const SearchBar = styled.div`
@@ -174,7 +173,9 @@ export default function Search() {
                                 results.users.length > 0 && results.users.map(user => {
                                     return(
                                         <div key={nanoid()} className="">
-                                            <UserCard user={user} />
+                                            <Suspense fallback={<div></div>}>
+                                                <UserCard user={user} />    
+                                            </Suspense>
                                         </div>
                                     )
                                 })
@@ -186,7 +187,9 @@ export default function Search() {
                                 results.posts.length > 0 && results.posts.map(post => {
                                     return(
                                         <div key={nanoid()} className="">
-                                            <PostCard post={post}/>
+                                            <Suspense fallback={<div></div>}>
+                                                <PostCard post={post}/>
+                                            </Suspense>
                                         </div>
                                     )
                                 })

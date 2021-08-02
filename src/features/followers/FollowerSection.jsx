@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, Suspense} from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from "@/features/_shared_/UserAvatar";
 import { useSelector, useDispatch } from 'react-redux';
 import {MdKeyboardArrowRight} from "react-icons/md";
 
 import { getUserFollowerData } from '@/features/followers/followersSlice';
-import FollowerListPopup from "@/features/followers/FollowerListPopup";
+const FollowerListPopup = React.lazy(() => import('@/features/followers/FollowerListPopup'));
+
 import styled from 'styled-components';
 
 const ProfileFollowSection = styled.div`
@@ -118,7 +119,9 @@ export default function FollowerSection({userId}) {
 
             {
                 followerPopupState.isPopupOpen && 
-                <FollowerListPopup followerPopupData = {followerPopupState} closePopup={closePopup} />
+                <Suspense fallback={<div></div>}>
+                    <FollowerListPopup followerPopupData = {followerPopupState} closePopup={closePopup} />    
+                </Suspense>
             }
         </ProfileFollowSection>
     )

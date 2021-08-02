@@ -1,9 +1,10 @@
-import React from 'react'
-import AddPost from "@/features/posts/AddPost";
+import React, {Suspense} from 'react'
 import UserFeed from '@/features/feed/UserFeed';
 import GeneralFeed from '@/features/feed/GeneralFeed';
-import TopContributors from '@/features/feed/TopContributors';
 import useWindowDimensions from "@/hooks/useWindowDimensions";
+
+const TopContributors = React.lazy(() => import('@/features/feed/TopContributors'));
+const AddPost = React.lazy(() => import('@/features/posts/AddPost'));
 
 export default function Home() {
     const {width, height} = useWindowDimensions();
@@ -13,7 +14,10 @@ export default function Home() {
             <div className="col-span-5 md:col-span-3">
                 {
                     width >= 768 ?
-                    <AddPost /> : null
+                    <Suspense fallback={<div></div>}>
+                        <AddPost />
+                    </Suspense>
+                    : null
                 }
                 <UserFeed />
                 <GeneralFeed />
@@ -22,7 +26,10 @@ export default function Home() {
             <div className="col-span-5 md:col-span-2">
                 {
                     width >= 768 ?
-                    <TopContributors /> : null
+                    <Suspense fallback={<div></div>}>
+                        <TopContributors />
+                    </Suspense>
+                    : null
                 }
             </div>
         </div>
