@@ -68,7 +68,7 @@ export default function FollowerListPopup({ followerPopupData, closePopup }) {
                     {
                         followerPopupData.listOfProfiles.map(profile => {
                             return (
-                                <li key={profile.userId._id} className="my-2 border border-purple-200 rounded-lg shadow-sm p-1">
+                                <li key={profile._id} className="my-2 border border-purple-200 rounded-lg shadow-sm p-1">
                                     {
                                         followerPopupData.listType === "Followers" ? 
                                         <div className="flex gap-x-2 justify-between items-center">
@@ -85,12 +85,6 @@ export default function FollowerListPopup({ followerPopupData, closePopup }) {
                                                 </div>
                                             </div>
 
-                                            {/* <div className="">
-                                                <Button variant="contained" className="btn-primary">
-                                                   <MdAdd className="text-lg mr-1" /> Follow
-                                                </Button>
-                                            </div> */}
-
                                         </div>
                                         : 
                                         <div className="flex gap-x-2 justify-between items-center">
@@ -100,19 +94,12 @@ export default function FollowerListPopup({ followerPopupData, closePopup }) {
                                                 </Link>
                                                 
                                                 <div className="flex flex-col">
-                                                    <Link to={"/profile/"+profile.userId._id} >
+                                                    <Link to={"/profile/"+profile.follows._id} >
                                                         <h3>{profile.follows.name}</h3>
                                                     </Link>
                                                     <small className="text-gray-500">{profile.follows.username}</small>
                                                 </div>
                                             </div>
-
-                                            {/* <div className="">
-                                                <Button variant="contained" className="btn-primary">
-                                                   <MdAdd className="text-lg mr-1" /> Follow
-                                                </Button>
-                                            </div> */}
-
                                         </div>
                                     }
                                 </li>
