@@ -52,11 +52,10 @@ export default function Search() {
             loading: true
         })
 
-        console.log("searching.. ", searchQuery);
         try{
             // const response = await axios.get(`https://kvell-app.herokuapp.com/search?q=${searchQuery}`);
             const response = await axios.get(getUrl("search", {})+`?q=${searchQuery}`);
-            console.log('response of search: ', response);
+            // console.log('response of search: ', response);
             
             let postsResults = response.data.posts;
             let usersResults = response.data.users;
@@ -170,7 +169,7 @@ export default function Search() {
                     <div className="">
                         <h4 className=" mb-4 text-gray-400 font-normal">Showing <strong>{results.users.length + results.posts.length}</strong> results for {searchQuery}</h4> 
                         
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                             {
                                 results.users.length > 0 && results.users.map(user => {
                                     return(
@@ -182,7 +181,7 @@ export default function Search() {
                             }
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                             {
                                 results.posts.length > 0 && results.posts.map(post => {
                                     return(
