@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview --port 3000"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.4",
