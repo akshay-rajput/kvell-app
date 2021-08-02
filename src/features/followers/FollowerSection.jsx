@@ -30,7 +30,6 @@ export default function FollowerSection({userId}) {
     const [followerPopupState, setFollowerPopupState] = useState(initialPopupState);
 
     useEffect(() => {
-        // console.log("compare state user with current: ", profileState.userData._id + " --- "+ userId)
         if(profileState.userData._id !== userId){
             dispatch(getUserFollowerData(userId));
             // dispatch(getUserPosts(userId));
@@ -42,7 +41,6 @@ export default function FollowerSection({userId}) {
 
     // open popup
     function openFollowPopup(typeOfList, profileList){
-        // console.log('clicked show all..', typeOfList + " --- ", profileList);
         setFollowerPopupState(prevState => (
             { 
                 listType: typeOfList,
@@ -53,7 +51,7 @@ export default function FollowerSection({userId}) {
     }
 
     function closePopup(){
-        console.log("close pop");
+        // console.log("close pop");
         setFollowerPopupState(prevState => (
             { 
                 ...prevState,

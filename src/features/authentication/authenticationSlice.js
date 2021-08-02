@@ -13,7 +13,6 @@ const userInfo = {
     token: localToken ? localToken : null,
     userAvatar: localAvatar ? localAvatar : ""
 }
-// console.log('userInfo: ', userInfo);
 
 export const authenticationSlice = createSlice({
     name: 'authentication',
@@ -21,12 +20,10 @@ export const authenticationSlice = createSlice({
     reducers: {
         UPDATE_USER_AVATAR: (state, action) => {
             let avatarUrl = `"${action.payload}"`;
-            // console.log('updateAvatar: ', action.payload);
             localStorage.setItem('userAvatar', avatarUrl);
             state.userAvatar = action.payload;
         },
         LOGIN: (state, action) => {
-            console.log('login: ', action);
             state.userId = action.payload.id;
             state.name = action.payload.name;
             state.username = action.payload.name;
@@ -34,7 +31,6 @@ export const authenticationSlice = createSlice({
             state.userAvatar = action.payload.avatarUrl;
         },
         LOGOUT: state => {
-            // console.log('logoutAction..')
             localStorage.setItem('userId', null);
             localStorage.setItem('name', null);
             localStorage.setItem('username', null);

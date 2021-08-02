@@ -70,7 +70,6 @@ export default function Signup() {
         // make a request and dispatch
         try{
             const response = await axios.post("https://kvell-app.herokuapp.com/signup", signupData);
-            console.log('user response: ', response);
 
             if(response.data.success){
                 let userData = {
@@ -86,7 +85,6 @@ export default function Signup() {
                 })
     
                 // show toast of successful signup and navigate
-                console.log("signed up : ", userData);
 
                 toast.success(`Signed up successfully`, {
                     position: toast.POSITION.BOTTOM_RIGHT

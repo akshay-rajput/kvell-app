@@ -60,12 +60,10 @@ export default function FollowButton({followUserId, listOfFollowers}) {
 
         // dispatch to add FollowUserId to listOfFollowers of user
         if(alreadyFollowing){
-            console.log('dispatch unfollow');
             await dispatch(unfollowUser({userId: authState.userId, followUserId:followUserId}));
         }
         // dispatch unfollow
         else{
-            console.log('dispach follow..');
             await dispatch(followUser({userId: authState.userId, followUserId:followUserId}));
         }
 

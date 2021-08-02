@@ -15,9 +15,9 @@ export default function UserFeed(){
                 await dispatch(getUserFeed(authState.userId));    
             }
         })();
-        return () => {
-            console.log('unmount userfeed');
-        }
+        // return () => {
+        //     console.log('unmount userfeed');
+        // }
     }, [authState.token]);
     
     return(

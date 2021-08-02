@@ -7,7 +7,6 @@ export const getUserData = createAsyncThunk("profile/getUserData", async({userId
         // console.count('called GetUserData - ');
         // console.log('called by: ', calledBy);
         const response = await axios.get(getUrl("getUser", {userId}));
-        console.log('response of getUser: ', response);
         return response.data.user;
     }
     catch(error){
@@ -21,7 +20,6 @@ export const getUserData = createAsyncThunk("profile/getUserData", async({userId
 export const saveUserData = createAsyncThunk("profile/saveUserData", async({userId, userData}) => {
     try{
         const response = await axios.post(getUrl("updateUser", {userId}), userData);
-        console.log('save response: ', response);
         return response.data.user;
     }
     catch(error){
@@ -52,8 +50,6 @@ export const getUserPosts = createAsyncThunk("profile/getUserPosts", async(userI
         });
         // console.log('response -- userPosts: ', response.data);
         return response.data.posts;
-        // let userPosts = response.data.posts.filter(post => post.publisher === userId);
-        // return userPosts;
     }
     catch(error){
         console.log('error during getUserPosts: ', error);

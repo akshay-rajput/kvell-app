@@ -32,9 +32,9 @@ const AddPostDiv = styled.div`
 `;
 
 export default function AddPost() {
-    useEffect(() => {
-        console.log('mounted add post..');
-    }, []);
+    // useEffect(() => {
+    //     console.log('mounted add post..');
+    // }, []);
 
     const initialPostState = {
         postContent: "",

@@ -101,8 +101,6 @@ export default function PostPage() {
         try{
             clonedPost.comments.push(commentToBeAdded);
 
-            console.log('comment add: ', clonedPost);
-
             // update in db
             await dispatch(updatePost({
                 updatedPost: clonedPost,
@@ -117,7 +115,7 @@ export default function PostPage() {
             await dispatch(updatePostInProfile(clonedPost));
 
             // send notification if not commenting on own post
-            console.log("checking to send notif: ", clonedPost.publisher._id +' -- auth: ', authState.userId);
+            // console.log("checking to send notif: ", clonedPost.publisher._id +' -- auth: ', authState.userId);
             if(authState.userId !== clonedPost.publisher._id){
                 let notificationData = {
                     postId: clonedPost._id,

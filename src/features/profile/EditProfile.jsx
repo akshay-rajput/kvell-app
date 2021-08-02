@@ -181,7 +181,6 @@ export default function EditProfile() {
 
     async function updateAvatar(event){
         if(event.target.files?.length > 0){
-            console.log('udpated avatar: ', event.target.files[0]);
 
             setChangeAvatar(true);
             // Create an object of formData
@@ -226,39 +225,6 @@ export default function EditProfile() {
         
       // Details of the uploaded file
     }
-    // async function checkUploadResult(uploadError, uploadResult){
-    //     if (!uploadError && uploadResult && uploadResult.event === "success") { 
-    //         console.log('Done! Here is the image info: ', uploadResult.info);
-            
-    //         setProfileData(prevState => ({
-    //             ...prevState,
-    //             user: {
-    //                 ...prevState.user,
-    //                 avatarUrl: uploadResult.info.secureUrl
-    //             }
-    //         }))
-    
-    //         try{
-    //             // dispatch action to save profile
-    //             await dispatch(saveUserData({userId: authState.userId, userData: profileData.user}));
-            
-    //             toast.success(`Avatar updated successfully`, {
-    //                 position: toast.POSITION.BOTTOM_RIGHT
-    //             });
-    //         }
-    //         catch(error){
-                
-    //             toast.error(`There was a problem updating avatar`, {
-    //                 position: toast.POSITION.BOTTOM_RIGHT
-    //             });
-    //         }
-    //         // change image
-    //         // dispatch(updateProfileAvatar(uploadResult.info.secureUrl));
-    //     }
-    //     else{
-    //         console.log('Error uploading image: ', uploadError);
-    //     }
-    // }
 
     return (
         <ProfileForm className="flex flex-col w-full">

@@ -122,15 +122,10 @@ export default function Login() {
                 loginFormData = {...loginData}
             }
 
-            console.log('loginFormData: ', loginFormData);
-
             const response = await axios.post("https://kvell-app.herokuapp.com/login", loginFormData);
             // const response = await axios.post("http://localhost:4000/login", loginData);
 
-            console.log('login response: ', response);
-
             if(response.data.success){
-                console.log('success response..',response.data.success);
                 let userData = {
                     name: response.data.user.name,
                     username: response.data.user.username,

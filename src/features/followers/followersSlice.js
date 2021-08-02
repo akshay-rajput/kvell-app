@@ -9,7 +9,6 @@ export const getUserFollowerData = createAsyncThunk("followers/getUserFollowerDa
                 userid: userId
             }
         });
-        console.log('response of getFollow: ', response);
 
         let followData = {
             followers: response.data.followers,
@@ -27,7 +26,7 @@ export const getUserFollowerData = createAsyncThunk("followers/getUserFollowerDa
 
 // follow a user
 export const followUser = createAsyncThunk("followers/followUser", async({userId, followUserId}) => {
-    console.log("myId: "+userId+' === follow: ', followUserId);
+    // console.log("myId: "+userId+' === follow: ', followUserId);
     
     try{
         const response = await axios.request ({
@@ -38,7 +37,7 @@ export const followUser = createAsyncThunk("followers/followUser", async({userId
             }
         });
 
-        console.log('response of follow: ', response);
+        // console.log('response of follow: ', response);
         return response.data;
     }
     catch(error){
@@ -49,7 +48,6 @@ export const followUser = createAsyncThunk("followers/followUser", async({userId
 
 // unfollow a user
 export const unfollowUser = createAsyncThunk("followers/unfollowUser", async({userId, followUserId}) => {
-    // console.log("myId: "+userId+' === unfollow: ', followUserId);
 
     try{
         const response = await axios.request ({
@@ -59,7 +57,6 @@ export const unfollowUser = createAsyncThunk("followers/unfollowUser", async({us
                 'userid': userId
             }
         });
-        console.log('response of unfollow: ', response);
         
         return {userId, followUserId};
     }
@@ -87,7 +84,6 @@ export const followersSlice = createSlice({
             state.status = "Loading"
         },
         [getUserFollowerData.fulfilled] : (state, action) => {
-            // console.log("current state - ", current(state) );
             state.followers = action.payload.followers;
             state.following = action.payload.following;
             state.status = "Fulfilled";
@@ -101,7 +97,6 @@ export const followersSlice = createSlice({
             state.status = "Loading"
         },
         [followUser.fulfilled] : (state, action) => {
-            // console.log("current state - ", current(state) );
             state.followers = action.payload.followers;
             state.following = action.payload.following;
             // state.followers = action.payload.followers;
@@ -116,10 +111,8 @@ export const followersSlice = createSlice({
             state.status = "Loading"
         },
         [unfollowUser.fulfilled] : (state, action) => {
-            // console.log("current state - ", current(state) );
             const {userId, followUserId} = action.payload;
             let newFollowerList = state.followers.filter((follower) => follower.userId._id !== userId);
-            console.log('newFOllowers: ', newFollowerList.length);
 
             state.followers = newFollowerList;
             state.status = "Fulfilled";

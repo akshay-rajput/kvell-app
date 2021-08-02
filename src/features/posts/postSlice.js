@@ -5,7 +5,7 @@ import { getUrl } from "@/utils/api.config";
 // thunks
 export const createPost = createAsyncThunk("feed/createPost", async({postData, image}, {dispatch, getState}) => {
     try{
-        console.log('check image: '+image);
+        // console.log('check image: '+image);
 
         if(image){
             const formData = new FormData();
@@ -26,7 +26,6 @@ export const createPost = createAsyncThunk("feed/createPost", async({postData, i
         
         // console.log('postData: ', postData);
         const response = await axios.post(getUrl("addPost", {}), postData);
-        console.log('response of createPost: ', response);
 
         let createdPostData = response.data.post
 
@@ -37,10 +36,7 @@ export const createPost = createAsyncThunk("feed/createPost", async({postData, i
             name: authentication.name,
             username: authentication.username
         }
-        // console.log('publisher: ', publisher);
         createdPostData.publisher = publisher;
-
-        console.log('created Post: ', createdPostData);
         return createdPostData;
     }
     catch(error){
@@ -53,7 +49,6 @@ export const createPost = createAsyncThunk("feed/createPost", async({postData, i
 export const uploadImage = createAsyncThunk("post/uploadImage", async(formData)=> {
     try{
         const response = await axios.post(getUrl("fileUpload", {}), formData);
-        // console.log('image upload: ', response.data);
         return response.data.imageUrl;
     }
     catch(error){
@@ -66,7 +61,6 @@ export const uploadImage = createAsyncThunk("post/uploadImage", async(formData)=
 export const updatePost = createAsyncThunk("post/updatePost", async ({updatedPost, postId}) => {
     try{
         const response = await axios.post(getUrl("updatePost", {postId}), updatedPost);
-        console.log('updated post: ', response.data);
         return response.data.post;
     }
     catch(err){
@@ -79,7 +73,6 @@ export const updatePost = createAsyncThunk("post/updatePost", async ({updatedPos
 export const getPost = createAsyncThunk("post/getPost", async (postId) => {
     try{
         const response = await axios.get(getUrl("getPost", {postId}) );
-        console.log('fetched post: ', response.data);
         return response.data.post;
     }
     catch(err){
@@ -133,10 +126,8 @@ const postSlice = createSlice({
             state.status = "Loading";
         },
         [getPost.fulfilled] : (state, action) => {
-            console.log('action of getPOst: ', action.payload);
             state.post = action.payload;
             state.status = "Fulfilled";
-            console.log('updated state: ', state.post);
         },
         [getPost.rejected] : (state, action) => {
             state.status = "Rejected";

@@ -9,7 +9,6 @@ export const getNotificationsForUser = createAsyncThunk("post/getNotifications",
                 userid: userId
             }
         });
-        console.log('fetched notifications: ', response.data);
         return response.data.notifications;
     }
     catch(err){
@@ -21,7 +20,6 @@ export const getNotificationsForUser = createAsyncThunk("post/getNotifications",
 export const createNewNotification = createAsyncThunk("post/createNewNotification", async (notificationData) => {
     try{
         const response = await axios.post(getUrl("createNotification", {}), notificationData);
-        console.log('created notification: ', response.data);
     }
     catch(err){
         console.log("Error creating notification: ", err.message);
@@ -37,7 +35,6 @@ export const updateAllNotifications = createAsyncThunk("post/updateAllNotificati
                 markallread: true
             }
         });
-        console.log('markedAll notifications: ', response.data);
     }
     catch(err){
         console.log("Error updating notifications: ", err.message);
@@ -77,7 +74,7 @@ const notificationSlice = createSlice({
             let orderedNotifications = action.payload.reverse();
             state.userNotifications = orderedNotifications;
             state.status = "Fulfilled";
-            console.log("notifs.. ", state.userNotifications);
+            // console.log("notifs.. ", state.userNotifications);
         },
         [getNotificationsForUser.rejected] : (state, action) => {
             state.status = "Rejected";

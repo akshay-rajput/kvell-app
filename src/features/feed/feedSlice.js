@@ -4,7 +4,6 @@ import { getUrl } from "../../utils/api.config";
 
 // thunks
 export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {dispatch}) => {
-    // console.log('getting userFeed:', userId);
     try{
         const response = await axios.get(getUrl("getHomeFeed", {}), {
             headers: {
@@ -12,7 +11,6 @@ export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {d
                 userid: userId
             }
         });
-        console.log('response of getFeed: ', response);
 
         let userFeedPostIds = [];
         if(response.data.posts.length > 0){
@@ -49,7 +47,7 @@ export const getGeneralFeed = createAsyncThunk("feed/getGeneralFeed", async(user
                 return !userFeedPostIds.includes(post._id);
             })
         }
-        console.log('others: ', otherFeed);
+        // console.log('others: ', otherFeed);
         return otherFeed;
     }
     catch(error){
@@ -62,7 +60,7 @@ export const getGeneralFeed = createAsyncThunk("feed/getGeneralFeed", async(user
 export const getTopUsers = createAsyncThunk("feed/getTopUsers", async() => {
     try{
         const response = await axios.get( getUrl("getTopUsers", {}) );
-        console.log("top users: ", response.data.topUsers);
+        // console.log("top users: ", response.data.topUsers);
         return response.data.topUsers;
     }
     catch(error){
