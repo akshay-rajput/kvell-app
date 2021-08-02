@@ -17,7 +17,7 @@ export default function UserCard({user, numberOfPosts}) {
     return (
         <UserInfoCard className="flex gap-x-2 shadow-sm justify-between items-center">
             <div className="flex gap-x-2 flex-grow">
-                <Link to={"/profile/"+user._id} >
+                <Link to={"/profile/"+user._id} aria-label={user.name}>
                     <Avatar avatarSize={"medium"} avatarUrl={user.avatarUrl} />
                 </Link>
                 
@@ -25,7 +25,7 @@ export default function UserCard({user, numberOfPosts}) {
                     numberOfPosts ? 
                     <div className="flex flex-wrap flex-grow justify-between">
                         <div className="">
-                            <Link to={"/profile/"+user._id} >
+                            <Link to={"/profile/"+user._id} aria-label={user.name}>
                                 <h3>{user.name}</h3>
                             </Link>
                             <small className="text-xs text-gray-500">@{user.username}</small>
@@ -35,7 +35,7 @@ export default function UserCard({user, numberOfPosts}) {
                     </div>
                     :
                     <div className="flex flex-col">
-                        <Link to={"/profile/"+user._id} >
+                        <Link to={"/profile/"+user._id} aria-label={user.name} >
                             <h3>{user.name}</h3>
                         </Link>
                         <small className="text-gray-500">@{user.username}</small>

@@ -77,19 +77,19 @@ export default function TheNavbar({windowWidth}) {
                 <div className="flex items-center flex-grow md:justify-end">
                     <ul className="flex flex-grow md:flex-initial items-center justify-between md:gap-x-4 flex-wrap">
                         <li>
-                            <NavLink end to="/" className="flex items-center">
+                            <NavLink end to="/" className="flex items-center" aria-label="Home">
                                 <HiOutlineHome className="" />
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink end to="/search" className="flex items-center">
+                            <NavLink end to="/search" className="flex items-center" aria-label="Search">
                                 <MdSearch className="" />
                             </NavLink>
                         </li>
                         {
                             windowWidth < 767 ?
                             <li>
-                                <NavLink end to="/addpost" className="flex items-center">
+                                <NavLink end to="/addpost" className="flex items-center" aria-label="Add post">
                                     <MdAddCircleOutline className="" />
                                 </NavLink>
                             </li>
@@ -97,7 +97,7 @@ export default function TheNavbar({windowWidth}) {
                             null
                         }
                         <li>
-                            <NavLink end to="/notifications" className="flex items-center relative">
+                            <NavLink end to="/notifications" className="flex items-center relative" aria-label="Notifications">
                                 <MdNotificationsNone className="" />
                                 {
                                     unreadNotifications > 0 &&
@@ -107,7 +107,7 @@ export default function TheNavbar({windowWidth}) {
                         </li>
 
                         <li>
-                            <NavLink end to={"/profile/"+authState.userId} className="flex items-center profile-pic">
+                            <NavLink end to={"/profile/"+authState.userId} className="flex items-center profile-pic" aria-label="User Profile">
                                 {/* <small className="">{JSON.stringify(authState)}</small> */}
                                 {
                                     authState.userAvatar ? 

@@ -45,7 +45,7 @@ export default function UserProfileInfo({userData}) {
                         userData.links?.length > 0 && userData.links.map(link => {
                             return(
                                 link.url !== "" ? 
-                                <a href={link.url} key={link.linkType} className="text-red-400" target="_blank" rel="noopener noreferrer">
+                                <a href={link.url} key={link.linkType} aria-label={link.linkType} className="text-red-400" target="_blank" rel="noopener noreferrer">
                                     {
                                         link.linkType === "Instagram" ? <GrInstagram className=""/> :
                                         link.linkType === "Facebook" ? <GrFacebook className="" /> :
