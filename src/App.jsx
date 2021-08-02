@@ -84,7 +84,8 @@ function App() {
 					await dispatch(getNotificationsForUser(authState.userId));
 				}
 
-				if(topContributorStatus === "Idle"){
+				// make request only on desktop
+				if(topContributorStatus === "Idle" && width > 767){
 					await dispatch(getTopUsers());
 				}
 			})();
