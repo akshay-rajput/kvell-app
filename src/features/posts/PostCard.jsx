@@ -25,6 +25,7 @@ const PostCardDiv = styled.div`
         }
 
         img{
+            width: 100%;
             max-width: 350px;
             border-radius: var(--border-radius);
         }
@@ -89,7 +90,7 @@ export default function PostCard({post}) {
             await dispatch(updatePostInProfile(clonedPost));
 
             // send notification if liking someone else's post
-            console.log("checking to send notif: ", clonedPost.publisher._id +' -- auth: ', authState.userId);
+            // console.log("checking to send notif: ", clonedPost.publisher._id +' -- auth: ', authState.userId);
             if((authState.userId !== clonedPost.publisher._id) && !isThisPostLiked){
                 let notificationData = {
                     postId: clonedPost._id,
@@ -130,7 +131,7 @@ export default function PostCard({post}) {
 
             <div className="p-2 post-content text-sm text-gray-700">
                 <p className="post-text">{post.content}</p>
-                {post.images.length > 0 && <img src={post.images[0].imageUrl} alt="post image" className="my-2 rounded" />} 
+                {post.images.length > 0 && <img loading="lazy" src={post.images[0].imageUrl} alt="post image" className="my-2 rounded" />} 
                 <br />
                 <div className="flex items-center gap-x-2">
                     {
@@ -160,17 +161,12 @@ export default function PostCard({post}) {
                         }
                         <small className="ml-1 text-sm">{post.likes.length > 0 ? post.likes.length : ""}</small>
                     </button>
-                    <Link to={"/posts/"+post._id} className="flex items-center link-button text-xl gap-x-1">
+                    <Link to={"/posts/"+post._id} className="flex items-center link-button text-xl gap-x-1" aria-label="Comment">
                         <FaRegComment /> 
                         <small className="ml-1 text-sm">{post.comments.length > 0 ? post.comments.length : ""}</small>
                     </Link>
                 </div>
 
-                {/* <small className="text-gray-400">
-                    {new Date(post.createdAt).toDateString()} 
-                    <span className="mx-2">&bull;</span>
-                    {new Date(post.createdAt).toLocaleTimeString()}
-                </small> */}
             </div>
         </PostCardDiv>
     )

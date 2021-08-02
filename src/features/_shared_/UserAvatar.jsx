@@ -19,8 +19,8 @@ const Avatar = styled.div`
 export default function UserAvatar({avatarUrl, avatarSize}) {
 
     return (
-        <Avatar avatarSize={avatarSize}>
-            <img src={avatarUrl ? avatarUrl : "https://nitreo.com/img/igDefaultProfilePic.png"} alt="user" className="" />
+        <Avatar avatarSize={avatarSize} aria-label="User avatar">
+            <img loading="lazy" src={avatarUrl ? avatarUrl : "https://nitreo.com/img/igDefaultProfilePic.png"} alt="user" className="" />
                     
         </Avatar>
     )

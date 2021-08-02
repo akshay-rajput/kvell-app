@@ -83,7 +83,7 @@ export default function UserPostCard({postData, userInfo}) {
             await dispatch(updatePostInFeed(clonedPost));
 
             // send notification if not liking own post
-            console.log("checking to send notif: ", clonedPost.publisher._id +' -- auth: ', authState.userId);
+            // console.log("checking to send notif: ", clonedPost.publisher._id +' -- auth: ', authState.userId);
             if((authState.userId !== clonedPost.publisher._id) && !isThisPostLiked){
                 let notificationData = {
                     postId: clonedPost._id,
@@ -126,7 +126,7 @@ export default function UserPostCard({postData, userInfo}) {
             <div className="p-2 post-content text-sm text-gray-700">
                 <p className="post-text">{postData.content}</p>
                 <br />
-                {postData.images.length > 0 && <img src={postData.images[0].imageUrl} alt="post image" className="my-2" />}
+                {postData.images.length > 0 && <img loading="lazy" src={postData.images[0].imageUrl} alt="post image" className="my-2" />}
                 <br />
                 <div className="flex items-center gap-x-2">
                     {
@@ -156,17 +156,12 @@ export default function UserPostCard({postData, userInfo}) {
                         }
                         <small className="ml-1 text-sm">{postData.likes.length > 0 ? postData.likes.length : ""}</small>
                     </button>
-                    <Link to={"/posts/"+postData._id} className="flex text-xl items-center gap-x-1">
+                    <Link to={"/posts/"+postData._id} className="flex text-xl items-center gap-x-1" aria-label="Comment">
                         <FaRegComment /> 
                         <small className="ml-1 text-sm">{postData.comments.length > 0 ? postData.comments.length : ""}</small>
                     </Link>
                 </div>
 
-                {/* <small className="text-gray-400">
-                    {new Date(postData.createdAt).toDateString()} 
-                    <span className="mx-2">&bull;</span>
-                    {new Date(postData.createdAt).toLocaleTimeString()}
-                </small> */}
             </div>
         </PostCard>
     )
