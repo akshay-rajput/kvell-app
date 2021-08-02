@@ -228,7 +228,7 @@ export default function Login() {
                             <input type={showPassword ? "text":"password"} id="user_password" name='password' ref={password}  onChange={handleInputChange}
                                     placeholder="Enter Password" className="w-full" required/>  
 
-                            <PasswordVisibilityToggler type="button" onClick={() => setShowPassword(!showPassword)} className="cursor-pointer block text-gray-500">
+                            <PasswordVisibilityToggler type="button" aria-label="Toggle Password visibility" onClick={() => setShowPassword(!showPassword)} className="cursor-pointer block text-gray-500">
                                 {
                                     showPassword ? <MdVisibility /> : <MdVisibilityOff /> 
                                 }
