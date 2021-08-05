@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import Avatar from "@/features/_shared_/UserAvatar";
 import { updatePostInProfile } from '@/features/profile/profileSlice';
@@ -43,6 +43,18 @@ export default function UserPostCard({postData, userInfo}) {
     const dispatch = useDispatch();
 
     let isThisPostLiked = checkIfLiked(postData.likes, authState.userId);
+
+    const [optimizedImage, setOptimizedImage] = useState("");
+
+    useEffect(() => {
+        if(postData.images[0]?.imageUrl){
+            let position = postData.images[0].imageUrl.indexOf("upload") + 7;
+            let dynamic_width = `w_350,c_scale/`;
+            let opt_img_url = postData.images[0].imageUrl.substring(0, position) + dynamic_width + postData.images[0].imageUrl.substring(position);
+
+            setOptimizedImage(opt_img_url);
+        }
+    }, [postData]);
 
     async function likePostClicked(){
         // console.log('liked..');
@@ -126,7 +138,7 @@ export default function UserPostCard({postData, userInfo}) {
             <div className="p-2 post-content text-sm text-gray-700">
                 <p className="post-text">{postData.content}</p>
                 <br />
-                {postData.images.length > 0 && <img loading="lazy" src={postData.images[0].imageUrl} alt="post image" className="my-2" />}
+                {postData.images.length > 0 && <img loading="lazy" src={optimizedImage} alt="post image" className="my-2" />}
                 <br />
                 <div className="flex items-center gap-x-2">
                     {
@@ -146,7 +158,7 @@ export default function UserPostCard({postData, userInfo}) {
             <div className="p-2 flex justify-between items-center">
                 <div className="flex gap-x-6">
                     
-                    <button type="button" onClick={likePostClicked} className="flex items-center text-xl gap-x-1">
+                    <button type="button" aria-label="like" onClick={likePostClicked} className="flex items-center text-xl gap-x-1">
                         {
                             isThisPostLiked
                             ?

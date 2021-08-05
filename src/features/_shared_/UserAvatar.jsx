@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
+import useWindowDimensions from "@/hooks/useWindowDimensions";
 
 const Avatar = styled.div`
     border-radius: 50%;
@@ -17,10 +18,35 @@ const Avatar = styled.div`
 `;
 
 export default function UserAvatar({avatarUrl, avatarSize}) {
+    const [optimizedImage, setOptimizedImage] = useState("");
+
+    const {width, height} = useWindowDimensions();
+
+    useEffect(() => {
+        let rem = 16;
+        if(width < 768){
+            rem = 14;
+        }
+        console.log('avatar loaded');
+
+        if(avatarUrl){
+            let position = avatarUrl.indexOf("upload") + 7;
+            let dynamic_width = `w_${avatarSize == "large" ? 6*rem: avatarSize == "medium" ? 3*rem: 2*rem},c_scale/`;
+            let opt_img_url = avatarUrl.substring(0, position) + dynamic_width + avatarUrl.substring(position);
+
+            setOptimizedImage(opt_img_url);
+        }
+        else{
+            setOptimizedImage("https://nitreo.com/img/igDefaultProfilePic.png");
+        }
+        
+    }, []);
+
 
     return (
         <Avatar avatarSize={avatarSize} aria-label="User avatar">
-            <img loading="lazy" src={avatarUrl ? avatarUrl : "https://nitreo.com/img/igDefaultProfilePic.png"} alt="user" className="" />
+            {/* <img loading="lazy" src={avatarUrl ? avatarUrl : "https://nitreo.com/img/igDefaultProfilePic.png"} alt="user" className="" /> */}
+            <img loading="lazy" src={optimizedImage} alt="user" className="" />
                     
         </Avatar>
     )

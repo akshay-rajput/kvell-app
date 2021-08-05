@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import Avatar from "@/features/_shared_/UserAvatar";
 import {checkIfLiked} from '@/utils/checkIfLiked';
@@ -44,12 +44,17 @@ export default function PostCard({post}) {
 
     let isThisPostLiked = checkIfLiked(post.likes, authState.userId);
 
-    // useEffect(() => {
-    //     console.log("post mount: ", post._id);
-    //     return () => {
-    //         console.count('post unmount -- ');
-    //     }
-    // }, [post]);
+    const [optimizedImage, setOptimizedImage] = useState("");
+
+    useEffect(() => {
+        if(post.images[0]?.imageUrl){
+            let position = post.images[0].imageUrl.indexOf("upload") + 7;
+            let dynamic_width = `w_350,c_scale/`;
+            let opt_img_url = post.images[0].imageUrl.substring(0, position) + dynamic_width + post.images[0].imageUrl.substring(position);
+
+            setOptimizedImage(opt_img_url);
+        }
+    }, [post]);
 
     async function likePostClicked(){
         // console.log('liked..');
@@ -131,7 +136,7 @@ export default function PostCard({post}) {
 
             <div className="p-2 post-content text-sm text-gray-700">
                 <p className="post-text">{post.content}</p>
-                {post.images.length > 0 && <img loading="lazy" src={post.images[0].imageUrl} alt="post image" className="my-2 rounded" />} 
+                {post.images.length > 0 && <img loading="lazy" src={optimizedImage} alt="post image" className="my-2 rounded" />} 
                 <br />
                 <div className="flex items-center gap-x-2">
                     {
@@ -151,7 +156,7 @@ export default function PostCard({post}) {
             <div className="p-2 flex justify-between items-center">
                 <div className="flex gap-x-6">
                     
-                    <button type="button" onClick={likePostClicked} className="flex items-center text-xl gap-x-1">
+                    <button type="button" aria-label="like" onClick={likePostClicked} className="flex items-center text-xl gap-x-1">
                         {
                             isThisPostLiked
                             ?
