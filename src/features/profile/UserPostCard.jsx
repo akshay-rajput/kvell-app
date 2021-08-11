@@ -49,7 +49,7 @@ export default function UserPostCard({postData, userInfo}) {
     useEffect(() => {
         if(postData.images[0]?.imageUrl){
             let position = postData.images[0].imageUrl.indexOf("upload") + 7;
-            let dynamic_width = `w_350,c_scale/`;
+            let dynamic_width = `w_auto,c_scale/q_auto/f_auto/`;
             let opt_img_url = postData.images[0].imageUrl.substring(0, position) + dynamic_width + postData.images[0].imageUrl.substring(position);
 
             setOptimizedImage(opt_img_url);

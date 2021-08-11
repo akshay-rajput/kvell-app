@@ -25,7 +25,7 @@ const PostCardDiv = styled.div`
         }
 
         img{
-            width: 100%;
+            width: auto;
             max-width: 350px;
             border-radius: var(--border-radius);
         }
@@ -49,7 +49,7 @@ export default function PostCard({post}) {
     useEffect(() => {
         if(post.images[0]?.imageUrl){
             let position = post.images[0].imageUrl.indexOf("upload") + 7;
-            let dynamic_width = `w_350,c_scale/`;
+            let dynamic_width = `w_auto,c_scale/q_auto/f_auto/`;
             let opt_img_url = post.images[0].imageUrl.substring(0, position) + dynamic_width + post.images[0].imageUrl.substring(position);
 
             setOptimizedImage(opt_img_url);
