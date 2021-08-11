@@ -27,11 +27,10 @@ export default function UserAvatar({avatarUrl, avatarSize}) {
         if(width < 768){
             rem = 14;
         }
-        console.log('avatar loaded');
 
         if(avatarUrl){
             let position = avatarUrl.indexOf("upload") + 7;
-            let dynamic_width = `w_${avatarSize == "large" ? 6*rem: avatarSize == "medium" ? 3*rem: 2*rem},c_scale/`;
+            let dynamic_width = `w_${avatarSize == "large" ? 8*rem: 5*rem},c_scale/`;
             let opt_img_url = avatarUrl.substring(0, position) + dynamic_width + avatarUrl.substring(position);
 
             setOptimizedImage(opt_img_url);
