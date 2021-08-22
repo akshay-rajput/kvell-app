@@ -26,7 +26,7 @@ const PostCardDiv = styled.div`
 
         img{
             width: auto;
-            max-width: 350px;
+            max-width: 70%;
             border-radius: var(--border-radius);
         }
     }

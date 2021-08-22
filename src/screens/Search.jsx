@@ -129,7 +129,7 @@ export default function Search() {
 
     return (
         <div className="flex flex-col w-full">
-            <SearchBar className="mx-auto">
+            <SearchBar className="mx-auto mb-4">
                 <form className="flex items-center" onSubmit={doSearch}>
                     <input inputMode={"search"} type="search" placeholder="Search.." onChange={handleInputChange} value={searchQuery} required />
                     <button type="submit">
@@ -168,6 +168,10 @@ export default function Search() {
                     <div className="">
                         <h4 className=" mb-4 text-gray-400 font-normal">Showing <strong>{results.users.length + results.posts.length}</strong> results for {searchQuery}</h4> 
                         
+                        {
+                            results.users.length > 0 &&
+                            <h4 className="text-gray-500 font-semibold mb-2">Users</h4>
+                        }
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                             {
                                 results.users.length > 0 && results.users.map(user => {
@@ -182,6 +186,10 @@ export default function Search() {
                             }
                         </div>
 
+                        {
+                            results.posts.length > 0 &&
+                            <h4 className="text-gray-500 font-semibold mb-2">Posts</h4>
+                        }
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                             {
                                 results.posts.length > 0 && results.posts.map(post => {
