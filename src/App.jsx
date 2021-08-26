@@ -39,7 +39,8 @@ const GlobalStyles = createGlobalStyle`
 	--accent: coral;
     --primary: #9146ff;
 	--primary-dark: #7313ff;
-	--primary-light: #ede0ff;
+	--primary-light: #dfccf9;
+	// --primary-light: #ede0ff;
 	--light: #f9f5ff;
 	--dark: #292037;
 	--black: #121014;
