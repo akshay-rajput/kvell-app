@@ -73,7 +73,7 @@ const notificationSlice = createSlice({
 
             // reverse to get latest
             let orderedNotifications = action.payload.reverse();
-            console.log('Allnotification: ', orderedNotifications.length);
+            //console.log('Allnotification: ', orderedNotifications.length);
 
             let groupedNotificationsByPost = groupNotifications(orderedNotifications, "postId");
 

@@ -53,7 +53,7 @@ export const groupNotifications = (notifications, groupingKey) =>{
                 allNotifications.push(commentNotificationGroup);
             }
         }
-        console.log({allNotifications})
+        //console.log({allNotifications})
         return allNotifications;
     }
 }
