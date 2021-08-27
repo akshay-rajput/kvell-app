@@ -87,8 +87,10 @@ const feedSlice = createSlice({
             return {
                 userFeed: [],
                 generalFeed: [],
+                topContributors: [],
                 userFeedStatus: 'Idle',
                 generalFeedStatus: 'Idle',
+                topContributorStatus: "Idle"
             }
         },
         addPostToFeed: (state, action) => {
