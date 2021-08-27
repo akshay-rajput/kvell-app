@@ -16,7 +16,7 @@ export default function TopContributors(){
 
     return(
         <TopPosters className="p-4 flex flex-col">
-            <h4 className="text-lg font-semibold mb-2 text-gray-400">Top Contributors ✨</h4>
+            <h4 className="text-lg font-semibold mb-2 text-gray-400">Top Contributors</h4>
             {
                 topContributorStatus === "Loading"
                 && 

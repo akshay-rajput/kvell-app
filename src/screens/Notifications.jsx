@@ -43,7 +43,7 @@ export default function Notifications() {
                 :
                 <div className="flex flex-col flex-grow mb-4">
                     {
-                        userNotifications.length > 0 ?
+                        userNotifications?.length > 0 ?
                         userNotifications.map(notification => {
                             return (
                                 <NotificationCard key={notification._id} notification={notification} />

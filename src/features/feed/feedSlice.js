@@ -83,7 +83,16 @@ const feedSlice = createSlice({
     name: "feed",
     initialState: initialFeed,
     reducers: {
-        resetFeed: state => initialFeed,
+        resetFeed: (state, action) => {
+            return {
+                userFeed: [],
+                generalFeed: [],
+                topContributors: [],
+                userFeedStatus: 'Idle',
+                generalFeedStatus: 'Idle',
+                topContributorStatus: "Idle"
+            }
+        },
         addPostToFeed: (state, action) => {
             // console.log('add to feed: ', action.payload);
             state.userFeed.unshift(action.payload);

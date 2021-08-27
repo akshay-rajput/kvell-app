@@ -39,7 +39,7 @@ export default function UserAvatar({avatarUrl, avatarSize}) {
             setOptimizedImage("https://nitreo.com/img/igDefaultProfilePic.png");
         }
         
-    }, []);
+    }, [avatarUrl]);
 
 
     return (

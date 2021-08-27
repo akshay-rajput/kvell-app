@@ -38,7 +38,7 @@ const PostComment = styled.div`
 
     input.comment-input{
         font-size: 0.75rem;
-        border-color: var(--light);
+        border-color: var(--primary-light);
         border-radius: var(--border-radius);
         &:focus{
             outline: 1px solid var(--light);
@@ -56,8 +56,8 @@ const PostComment = styled.div`
         position: absolute;
         right: 0;
         z-index: 1;
-        top: -1rem;
-        height: 1rem;
+        top: -0.35rem;
+        height: 0.35rem;
         width: 100%;
         // background: black;
         background: linear-gradient(180deg, rgba(194,224,255,0) 0%, var(--light) 51%);}

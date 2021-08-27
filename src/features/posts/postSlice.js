@@ -92,10 +92,10 @@ const postSlice = createSlice({
     initialState: initialPostData,
     reducers: {
         resetPost: state => initialPostData,
-        // updatePostInSlice: (state, action) => {
-        //     // if in userfeed update the post
-        //     state.post = action.payload;
-        // }
+        updatePostInSlice: (state, action) => {
+            // if in userfeed update the post
+            state.post = action.payload;
+        }
     },
     extraReducers: {
         [createPost.pending] : (state, action) => {

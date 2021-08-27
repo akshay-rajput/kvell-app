@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
 import { getUrl } from "@/utils/api.config";
+import {groupNotifications} from "@/utils/groupNotifications";
 
 export const getNotificationsForUser = createAsyncThunk("post/getNotifications", async (userId) => {
     try{
@@ -39,7 +40,7 @@ export const updateAllNotifications = createAsyncThunk("post/updateAllNotificati
     catch(err){
         console.log("Error updating notifications: ", err.message);
         rejectWithValue(null);
-    }    
+    }
 })
 
 // slice
@@ -72,9 +73,13 @@ const notificationSlice = createSlice({
 
             // reverse to get latest
             let orderedNotifications = action.payload.reverse();
-            state.userNotifications = orderedNotifications;
+            console.log('Allnotification: ', orderedNotifications.length);
+
+            let groupedNotificationsByPost = groupNotifications(orderedNotifications, "postId");
+
+            state.userNotifications = groupedNotificationsByPost;
             state.status = "Fulfilled";
-            // console.log("notifs.. ", state.userNotifications);
+
         },
         [getNotificationsForUser.rejected] : (state, action) => {
             state.status = "Rejected";

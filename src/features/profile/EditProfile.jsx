@@ -7,6 +7,8 @@ import Avatar from '@/features/_shared_/UserAvatar';
 import { getUserData, getUserPosts, saveUserData, updateProfileAvatar } from '@/features/profile/profileSlice';
 import {UPDATE_USER_AVATAR} from "@/features/authentication/authenticationSlice";
 
+import {resetFeed} from '@/features/feed/feedSlice';
+
 import {useNavigate} from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
@@ -130,6 +132,8 @@ export default function EditProfile() {
             toast.success(`Profile updated successfully`, {
                 position: toast.POSITION.BOTTOM_RIGHT
             });
+
+            dispatch(resetFeed());
         }
         catch(error){
             
@@ -251,8 +255,8 @@ export default function EditProfile() {
                                 <label htmlFor="changeAvatar" disabled={changeAvatar} className="">
                                     <span className="edit-avatar">
                                         {    
-                                            profileData.user.avatarUrl ?
-                                            <Avatar avatarSize={"large"} avatarUrl={profileData.user.avatarUrl}/>
+                                            profileState.userData.avatarUrl ?
+                                            <Avatar avatarSize={"large"} avatarUrl={profileState.userData.avatarUrl}/>
                                             :
                                             <Avatar avatarSize={"large"} avatarUrl={""}/>
                                         }
