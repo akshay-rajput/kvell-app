@@ -58,7 +58,7 @@ export default function Search() {
             
             let postsResults = response.data.posts;
             let usersResults = response.data.users;
-            
+
             if(postsResults.length > 0 || usersResults.length > 0){
                 setResults(prevData => (
                     {
@@ -160,6 +160,9 @@ export default function Search() {
                     <div className="flex flex-col text-center mt-8 md:mt-20 p-8">
                         <span className="text-4xl text-gray-300">◔_◔</span>
                         <span className="mt-4 text-gray-400">Enter some text above to search for users or posts</span>
+                        <p className="text-gray-400 py-4">
+                            Here's some sample text to search - <strong>Test, App, Memer, Dadjokes</strong>
+                        </p>
                     </div>
                 }
 
