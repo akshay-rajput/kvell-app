@@ -46,23 +46,31 @@ export default function PostComments({allComments}){
         let updatedPost = {...post}
         updatedPost.comments = post.comments.filter(comment => comment._id !== commentId);
         // console.log({updatedPost});
-        try{
-            // update post in local state
-            dispatch(updatePostInSlice(updatedPost));
-            
-            await dispatch(updatePostInFeed(updatedPost));
 
-            // update in db
-            await dispatch(updatePost({
-                updatedPost: updatedPost,
-                postId: updatedPost._id
-            }));
-            
-            await dispatch(updatePostInProfile(updatedPost));
+        let confirmDeleteComment = confirm("Delete this comment?");
+
+        if(confirmDeleteComment){
+            try{
+                // update post in local state
+                dispatch(updatePostInSlice(updatedPost));
+                
+                await dispatch(updatePostInFeed(updatedPost));
+    
+                // update in db
+                await dispatch(updatePost({
+                    updatedPost: updatedPost,
+                    postId: updatedPost._id
+                }));
+                
+                await dispatch(updatePostInProfile(updatedPost));
+            }
+            catch(error){
+                console.log("couldn't delete comment: ", error.message);
+            }
         }
-        catch(error){
-            console.log("couldn't delete comment: ", error.message);
-        }
+        // else{
+        //     console.log('dont delete');
+        // }
     }
 
     return(
