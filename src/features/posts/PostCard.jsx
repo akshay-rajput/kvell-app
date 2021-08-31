@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import Avatar from "@/features/_shared_/UserAvatar";
 import {checkIfLiked} from '@/utils/checkIfLiked';
-import { updatePost } from '@/features/posts/postSlice';
-import { updatePostInFeed } from '@/features/feed/feedSlice';
-import { updatePostInProfile } from '@/features/profile/profileSlice';
+import { updatePost, updatePostInSlice, deletePost } from '@/features/posts/postSlice';
+import { updatePostInFeed, removePostFromFeed } from '@/features/feed/feedSlice';
+import { updatePostInProfile, removePostFromProfile } from '@/features/profile/profileSlice';
 
 import {Link} from 'react-router-dom';
 import { nanoid } from '@reduxjs/toolkit';import { formatDistanceToNow } from 'date-fns'
-import {FaRegComment, FaRegHeart, FaHeart} from 'react-icons/fa';
+import {FaRegComment, FaRegHeart, FaHeart, FaRegTrashAlt} from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { createNewNotification } from '@/features/notifications/notificationSlice';
 
@@ -113,6 +113,40 @@ export default function PostCard({post}) {
         }
     }
 
+    async function removePost(){
+        // console.log('delete: ', postId);
+        let postId = post._id;
+
+        let confirmDelete = confirm("Are you sure to delete this post?");
+        // console.log({confirmDelete});
+
+        // delete post from db
+        if(confirmDelete){
+            try{
+                // update post in local state
+                dispatch(removePostFromFeed(postId));
+
+                let updatedPost = {...post}
+                updatedPost.delete = true;
+                // add deleted in local post slice, to handle edge case of deleting from postpage
+                dispatch(updatePostInSlice(updatedPost));
+                
+                // update in db
+                await dispatch( deletePost(postId) );
+
+                // update in profile feed
+                dispatch(removePostFromProfile(postId));
+            }catch(error){
+                console.log('error deleting post - ', error.message);
+            }
+        }
+        else{
+            console.log('not delete')
+        }
+        // remove post from feed
+
+    }
+
     return (
         <PostCardDiv>
             <div className="post-toprow flex items-center">
@@ -172,6 +206,16 @@ export default function PostCard({post}) {
                     </Link>
                 </div>
 
+                {
+                    authState.userId === post.publisher._id
+                    ?
+                    <div className="delete-button-wrapper">
+                        <button onClick={removePost} className="mt-1 mr-1" aria-label="delete post" title="delete post?">
+                            <FaRegTrashAlt className="text-red-500"  />
+                        </button>
+                    </div>
+                    : null
+                }
             </div>
         </PostCardDiv>
     )

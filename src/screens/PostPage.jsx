@@ -158,6 +158,17 @@ export default function PostPage() {
                         status == "Rejected" ?
                         <ErrorState />
                         :
+                        status == "Not found" ?
+                        <div className="text-gray-500 text-md flex flex-col items-center justify-center py-12 border border-gray-200 rounded">
+                            The post you are looking for cannot be found.
+                            <small className="text-gray-400 py-2">It's probably been deleted.</small>
+                        </div>
+                        :
+                        post.deleted ?
+                        <div className="text-gray-500 text-md flex items-center justify-center py-12 border border-gray-200 rounded">
+                            This post has been removed.
+                        </div>
+                        :
                         <div className="post-container relative">
                             {
                                 (post._id === postId) &&
