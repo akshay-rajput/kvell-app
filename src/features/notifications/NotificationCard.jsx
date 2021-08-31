@@ -42,8 +42,8 @@ export default function NotificationCard({notification}) {
                     <Avatar avatarSize={"small"} avatarUrl={notification.notificationFrom.avatarUrl} /> 
                 </span>
 
-                <span className="notification-text flex justify-between items-center">
-                    <span className="">
+                <span className="notification-text flex justify-between flex-wrap items-center">
+                    <span className="w-full md:w-auto">
                         <strong>{notification.notificationFrom.name}</strong>
                         {
                             notification.otherCount > 0 ? ` and ${notification.otherCount} others `: ""
@@ -52,7 +52,7 @@ export default function NotificationCard({notification}) {
                             `${notification.notificationType == "Like" ? " liked": " commented on"} your post.`
                         }
                     </span> 
-                    <span className="text-xs text-gray-400 pl-2">{formatDistanceToNow(new Date(notification.createdAt)) + " ago"}</span>
+                    <span className="text-xs text-gray-400 pt-1 md:pt-0">{formatDistanceToNow(new Date(notification.createdAt)) + " ago"}</span>
                 </span>
                  
             </Link>
