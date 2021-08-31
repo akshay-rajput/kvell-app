@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getUrl } from "@/utils/api.config";
 
 // thunks
-export const createPost = createAsyncThunk("feed/createPost", async({postData, image}, {dispatch, getState}) => {
+export const createPost = createAsyncThunk("feed/createPost", async({postData, image}, {dispatch, getState, rejectWithValue}) => {
     try{
         // console.log('check image: '+image);
 
@@ -70,13 +70,26 @@ export const updatePost = createAsyncThunk("post/updatePost", async ({updatedPos
 })
 
 // get the post
-export const getPost = createAsyncThunk("post/getPost", async (postId) => {
+export const getPost = createAsyncThunk("post/getPost", async (postId, {rejectWithValue}) => {
     try{
         const response = await axios.get(getUrl("getPost", {postId}) );
         return response.data.post;
     }
     catch(err){
         console.log("Error getting post: ", err.message);
+        let code = err.response.status;
+        return rejectWithValue(code);
+    }
+})
+
+// delete post
+export const deletePost = createAsyncThunk("post/deletePost", async (postId) => {
+    try{
+        const response = await axios.delete(getUrl("removePost", {postId}));
+        return response.data.post;
+    }
+    catch(err){
+        console.log("Error deleting post: ", err.message);
         rejectWithValue(null);
     }
 })
@@ -130,7 +143,17 @@ const postSlice = createSlice({
             state.status = "Fulfilled";
         },
         [getPost.rejected] : (state, action) => {
-            state.status = "Rejected";
+            if(action.payload === 404){
+                state.status = "Not found"
+            }
+            else{
+                state.status = "Rejected";
+            }
+        },
+
+        // delete post from post page, show deleted message
+        [deletePost.fulfilled] : (state, action) => {
+            state.post.deleted = true;
         },
 
     }
