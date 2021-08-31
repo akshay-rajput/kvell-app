@@ -97,6 +97,18 @@ const feedSlice = createSlice({
             // console.log('add to feed: ', action.payload);
             state.userFeed.unshift(action.payload);
         },
+        removePostFromFeed: (state, action) => {
+            let postId = action.payload;
+            // console.log('post to update: ', post);
+
+            // check in user feed
+            let indexInUserFeed = state.userFeed.findIndex(element => element._id === postId);
+
+            // if in userfeed update userfeed
+            if(indexInUserFeed > -1){
+                state.userFeed.splice(indexInUserFeed, 1);
+            }
+        },
         updatePostInFeed: (state, action) => {
             // find the post
             let post = action.payload;
@@ -155,6 +167,6 @@ const feedSlice = createSlice({
     }
 });
 
-export const { resetFeed, addPostToFeed, updatePostInFeed } = feedSlice.actions;
+export const { resetFeed, addPostToFeed, removePostFromFeed, updatePostInFeed } = feedSlice.actions;
 
 export default feedSlice.reducer;
