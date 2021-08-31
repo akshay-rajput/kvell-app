@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import Avatar from "@/features/_shared_/UserAvatar";
-import { updatePostInProfile } from '@/features/profile/profileSlice';
 import {checkIfLiked} from '@/utils/checkIfLiked';
-import { updatePost } from '@/features/posts/postSlice';
-import { updatePostInFeed } from '@/features/feed/feedSlice';
+import { updatePost, deletePost } from '@/features/posts/postSlice';
+import { updatePostInFeed, removePostFromFeed } from '@/features/feed/feedSlice';
+import { updatePostInProfile, removePostFromProfile } from '@/features/profile/profileSlice';
 import { createNewNotification } from '@/features/notifications/notificationSlice';
 
 import {Link} from 'react-router-dom';
 import { nanoid } from '@reduxjs/toolkit';
 import { formatDistanceToNow } from 'date-fns'
-import {FaRegComment, FaRegHeart, FaHeart} from 'react-icons/fa';
+import {FaRegComment, FaRegHeart, FaHeart, FaRegTrashAlt} from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 
 const PostCard = styled.div`
@@ -114,6 +114,31 @@ export default function UserPostCard({postData, userInfo}) {
         }
     }
 
+    async function removePost(){
+        // console.log('delete: ', postId);
+        let postId = postData._id;
+
+        let confirmDelete = confirm("Are you sure to delete this post?");
+        // console.log({confirmDelete});
+
+        // delete post from db
+        if(confirmDelete){
+            try{
+                // update in profile feed
+                dispatch(removePostFromProfile(postId));
+                
+                // update in db
+                await dispatch( deletePost(postId) );
+
+                // update post in local state
+                dispatch(removePostFromFeed(postId));
+
+            }catch(error){
+                console.log('error deleting post - ', error.message);
+            }
+        }
+    }
+
     return (
         <PostCard className="p-2 shadow-sm mb-8">
             <div className="post-toprow flex items-center">
@@ -173,7 +198,16 @@ export default function UserPostCard({postData, userInfo}) {
                         <small className="ml-1 text-sm">{postData.comments.length > 0 ? postData.comments.length : ""}</small>
                     </Link>
                 </div>
-
+                {
+                    authState.userId === postData.publisher._id
+                    ?
+                    <div className="delete-button-wrapper">
+                        <button onClick={removePost} className="mt-1 mr-1" aria-label="delete post" title="delete post?">
+                            <FaRegTrashAlt className="text-red-500"  />
+                        </button>
+                    </div>
+                    : null
+                }
             </div>
         </PostCard>
     )
