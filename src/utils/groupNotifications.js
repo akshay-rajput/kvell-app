@@ -53,7 +53,11 @@ export const groupNotifications = (notifications, groupingKey) =>{
                 allNotifications.push(commentNotificationGroup);
             }
         }
-        //console.log({allNotifications})
+
+        // sort notifications to get latest first
+        allNotifications.sort((a,b)=> {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
         return allNotifications;
     }
 }
