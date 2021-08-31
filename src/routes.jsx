@@ -11,7 +11,7 @@ import EditProfile from "@/features/profile/EditProfile";
 import Notifications from "@/screens/Notifications";
 // import BugReport from '@/screens/BugReport';
 // import Acknowledgements from "@/screens/Acknowledgements";
-// import PageNotFound from '@/screens/PageNotFound';
+import PageNotFound from '@/screens/404Page';
 
 import {useRoutes, Navigate} from 'react-router-dom';
 
@@ -81,66 +81,11 @@ const ROUTES = () => [
         //     { path: 'me', element: <OwnUserProfile /> },
         // ]
     },
-    // {
-    //     path: "/video/:videoId",
-    //     key: "Video",
-    //     element: <Video/>, 
-    // },
-    
-    // playlist routes - order matters
-    // {   path: '/playlists/savedVideos',
-    //     key: "savedVideos",
-    //     end: true,
-    //     exact: true,
-    //     element: <SavedVideos />
-    // },
-    // {
-    //     path: "/playlists",
-    //     key: "Playlists",
-    //     end: true,
-    //     exact: true,
-    //     element: <Playlists/>,
-    // },
-    // {
-    //     path: "/playlists/:playlistId",
-    //     key: "UserPlaylist",
-    //     end: false,
-    //     exact: false,
-    //     element: <UserPlaylist/>,
-    // },
-
-    // {
-    //     path: "/search",
-    //     key: "Search",
-    //     element: <Search/>, 
-    // },
-    
-    
-    // {
-    //     path: "/profile",
-    //     key: "Profile",
-    //     element: <Profile/>, 
-    // },
-    // {
-    //     path: "/about",
-    //     key: "About",
-    //     element: <About/>, 
-    // },
-    // {
-    //     path: "/acknowledgements",
-    //     key: "Acknowledgements",
-    //     element: <Acknowledgements/>, 
-    // },
-    // {
-    //     path: "/bugreport",
-    //     key: "BugReport",
-    //     element: <BugReport/>, 
-    // },
-    // {
-    //     path: "*",
-    //     key: "PageNotFound",
-    //     element: <PageNotFound/>, 
-    // },  
+    {
+        path: "*",
+        key: "PageNotFound",
+        element: <PageNotFound/>, 
+    },  
 ];
 
 export function RenderRoutes() {
