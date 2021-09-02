@@ -5,14 +5,14 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {getNotificationsForUser} from '@/features/notifications/notificationSlice';
-import {getTopUsers} from '@/features/feed/feedSlice';
+// import {getTopUsers} from '@/features/feed/feedSlice';
 
 import { ToastContainer, Slide} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 // import 'swiper/swiper.scss';
 import "swiper/swiper-bundle.min.css";
-import { Swiper, SwiperSlide } from "swiper/react";
+// import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/components/pagination/pagination.min.css";
 import SwiperCore, {
 	Pagination,
@@ -31,7 +31,7 @@ import TheFooter from '@/features/_shared_/TheFooter';
 
 // style
 import { createGlobalStyle } from 'styled-components';
-import { Button } from '@material-ui/core'
+// import { Button } from '@material-ui/core'
 
 // Create a `GlobalStyles` component to pass variable for styled-components.
 const GlobalStyles = createGlobalStyle`
@@ -55,22 +55,9 @@ function App() {
 	const navigate = useNavigate();
 	const authState = useSelector(state => state.authentication);
 	const notificationState = useSelector(state => state.notifications);
-	const {topContributors, topContributorStatus} = useSelector(state => state.feed);	
     const dispatch = useDispatch();
 
 	const {width, height} = useWindowDimensions();
-	// const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-
-    // scroll to top on load
-    // useEffect(() => {
-	// 	console.log('pathname: ', pathname);
-    //     if(pathname !== "/"){
-	// 		window.scrollTo({
-	// 			top: 0,
-	// 			behavior: "smooth"
-	// 		});
-	// 	}
-    // }, [pathname]);
 
 	// auth
     useEffect(() => {
@@ -86,9 +73,9 @@ function App() {
 				}
 
 				// make request only on desktop
-				if(topContributorStatus === "Idle" && width > 767){
-					await dispatch(getTopUsers());
-				}
+				// if(topContributorStatus === "Idle" && width > 767){
+				// 	await dispatch(getTopUsers());
+				// }
 			})();
 		}
         
