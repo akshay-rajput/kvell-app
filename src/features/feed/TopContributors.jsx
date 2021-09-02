@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { ImSpinner8 } from 'react-icons/im';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import {getTopUsers} from '@/features/feed/feedSlice';
+import useWindowDimensions from "@/hooks/useWindowDimensions";
 import UserCard from '@/features/search/UserCard';
 import styled from 'styled-components';
 
@@ -13,6 +15,17 @@ const TopPosters = styled.div`
 `;
 export default function TopContributors(){
     const {topContributors, topContributorStatus} = useSelector(state => state.feed);
+    const dispatch = useDispatch();
+
+    const {width} = useWindowDimensions();
+
+    useEffect(()=> {
+        (async function(){
+            if(topContributorStatus === "Idle" && width > 767){
+                await dispatch(getTopUsers());
+            }
+        })();
+    }, []);
 
     return(
         <TopPosters className="p-4 flex flex-col">
