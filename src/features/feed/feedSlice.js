@@ -24,13 +24,13 @@ export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {d
             // get community posts
             await dispatch(getGeneralFeed(userFeedPostIds));
         }
-
+        // console.log("fulfilled feed: ", response.status);
         return response.data.posts;
     }
     catch(error){
         console.log('error during getUSerFeed - ', error.message);
-        let code = err.response.status;
-        rejectWithValue(code);
+        let code = error.response.status;
+        return rejectWithValue(code);
     }
 })
 
@@ -58,7 +58,7 @@ export const getGeneralFeed = createAsyncThunk("feed/getGeneralFeed", async(user
 })
 
 // get all users and find Top contributors
-export const getTopUsers = createAsyncThunk("feed/getTopUsers", async() => {
+export const getTopUsers = createAsyncThunk("feed/getTopUsers", async(_, {rejectWithValue}) => {
     try{
         const response = await axios.get( getUrl("getTopUsers", {}) );
         // console.log("top users: ", response.data.topUsers);
@@ -66,7 +66,7 @@ export const getTopUsers = createAsyncThunk("feed/getTopUsers", async() => {
     }
     catch(error){
         console.log('error getting users: ', error.message);
-        rejectWithValue(null);
+        return rejectWithValue(error.response.status);
     }
 })
 
@@ -138,8 +138,9 @@ const feedSlice = createSlice({
             state.userFeedStatus = "Fulfilled";
         },
         [getUserFeed.rejected] : (state, action) => {
+            // console.log("Rejection statusCode: ", action.payload);
             if(action.payload === 401){
-                state.userFeedStatus = "Idle";
+                state.userFeedStatus = "Expired";
             }else{
                 state.userFeedStatus = "Rejected";
             }
@@ -166,7 +167,11 @@ const feedSlice = createSlice({
             state.topContributorStatus = "Fulfilled";
         },
         [getTopUsers.rejected] : (state, action) => {
-            state.topContributorStatus = "Rejected";
+            if(action.payload === 401){
+                state.topContributorStatus = "Idle"
+            }else{
+                state.topContributorStatus = "Rejected";
+            }
         },
     
     }
