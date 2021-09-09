@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getUrl } from "../../utils/api.config";
 
 // thunks
-export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {dispatch}) => {
+export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {dispatch, rejectWithValue}) => {
     try{
         const response = await axios.get(getUrl("getHomeFeed", {}), {
             headers: {
@@ -24,17 +24,18 @@ export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {d
             // get community posts
             await dispatch(getGeneralFeed(userFeedPostIds));
         }
-
+        // console.log("fulfilled feed: ", response.status);
         return response.data.posts;
     }
     catch(error){
         console.log('error during getUSerFeed - ', error.message);
-        rejectWithValue(null);
+        let code = error.response.status;
+        return rejectWithValue(code);
     }
 })
 
 // general feed
-export const getGeneralFeed = createAsyncThunk("feed/getGeneralFeed", async(userFeedPostIds, {getState}) => {
+export const getGeneralFeed = createAsyncThunk("feed/getGeneralFeed", async(userFeedPostIds) => {
     try{
         const response = await axios.get( getUrl("getAllPosts", {}) );
         // console.log('response of GenFeed: ', response);
@@ -57,7 +58,7 @@ export const getGeneralFeed = createAsyncThunk("feed/getGeneralFeed", async(user
 })
 
 // get all users and find Top contributors
-export const getTopUsers = createAsyncThunk("feed/getTopUsers", async() => {
+export const getTopUsers = createAsyncThunk("feed/getTopUsers", async(_, {rejectWithValue}) => {
     try{
         const response = await axios.get( getUrl("getTopUsers", {}) );
         // console.log("top users: ", response.data.topUsers);
@@ -65,7 +66,7 @@ export const getTopUsers = createAsyncThunk("feed/getTopUsers", async() => {
     }
     catch(error){
         console.log('error getting users: ', error.message);
-        rejectWithValue(null);
+        return rejectWithValue(error.response.status);
     }
 })
 
@@ -137,7 +138,12 @@ const feedSlice = createSlice({
             state.userFeedStatus = "Fulfilled";
         },
         [getUserFeed.rejected] : (state, action) => {
-            state.userFeedStatus = "Rejected";
+            // console.log("Rejection statusCode: ", action.payload);
+            if(action.payload === 401){
+                state.userFeedStatus = "Expired";
+            }else{
+                state.userFeedStatus = "Rejected";
+            }
         },
 
         // general
@@ -161,7 +167,11 @@ const feedSlice = createSlice({
             state.topContributorStatus = "Fulfilled";
         },
         [getTopUsers.rejected] : (state, action) => {
-            state.topContributorStatus = "Rejected";
+            if(action.payload === 401){
+                state.topContributorStatus = "Idle"
+            }else{
+                state.topContributorStatus = "Rejected";
+            }
         },
     
     }

@@ -11,8 +11,8 @@ export default function UserFeed(){
 
     useEffect(() => {
         (async function(){
-            if((userFeedStatus == "Idle" && authState.token)){
-                await dispatch(getUserFeed(authState.userId));    
+            if((userFeedStatus == "Idle" && authState.token) || (userFeedStatus == "Expired" && authState.token)){
+                await dispatch(getUserFeed(authState.userId));
             }
         })();
         // return () => {
