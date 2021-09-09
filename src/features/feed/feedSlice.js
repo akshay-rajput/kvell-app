@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getUrl } from "../../utils/api.config";
 
 // thunks
-export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {dispatch}) => {
+export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {dispatch, rejectWithValue}) => {
     try{
         const response = await axios.get(getUrl("getHomeFeed", {}), {
             headers: {
@@ -29,12 +29,13 @@ export const getUserFeed = createAsyncThunk("feed/getUserFeed", async(userId, {d
     }
     catch(error){
         console.log('error during getUSerFeed - ', error.message);
-        rejectWithValue(null);
+        let code = err.response.status;
+        rejectWithValue(code);
     }
 })
 
 // general feed
-export const getGeneralFeed = createAsyncThunk("feed/getGeneralFeed", async(userFeedPostIds, {getState}) => {
+export const getGeneralFeed = createAsyncThunk("feed/getGeneralFeed", async(userFeedPostIds) => {
     try{
         const response = await axios.get( getUrl("getAllPosts", {}) );
         // console.log('response of GenFeed: ', response);
@@ -137,7 +138,11 @@ const feedSlice = createSlice({
             state.userFeedStatus = "Fulfilled";
         },
         [getUserFeed.rejected] : (state, action) => {
-            state.userFeedStatus = "Rejected";
+            if(action.payload === 401){
+                state.userFeedStatus = "Idle";
+            }else{
+                state.userFeedStatus = "Rejected";
+            }
         },
 
         // general
