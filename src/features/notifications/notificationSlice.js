@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getUrl } from "@/utils/api.config";
 import {groupNotifications} from "@/utils/groupNotifications";
 
-export const getNotificationsForUser = createAsyncThunk("post/getNotifications", async (userId) => {
+export const getNotificationsForUser = createAsyncThunk("post/getNotifications", async (userId, {rejectWithValue}) => {
     try{
         const response = await axios.get(getUrl("getNotifications", {}), {
             headers: {
@@ -14,7 +14,7 @@ export const getNotificationsForUser = createAsyncThunk("post/getNotifications",
     }
     catch(err){
         console.log("Error getting notifications: ", err.message);
-        rejectWithValue(null);
+        return rejectWithValue(err.response.status);
     }    
 })
 
@@ -24,11 +24,11 @@ export const createNewNotification = createAsyncThunk("post/createNewNotificatio
     }
     catch(err){
         console.log("Error creating notification: ", err.message);
-        rejectWithValue(null);
+        // return rejectWithValue(err.response.status);
     }
 })
 
-export const updateAllNotifications = createAsyncThunk("post/updateAllNotifications", async (userId) => {
+export const updateAllNotifications = createAsyncThunk("post/updateAllNotifications", async (userId, {rejectWithValue}) => {
     try{
         const response = await axios.post(getUrl("markNotificationsRead", {}), {}, {
             headers: {
@@ -39,7 +39,7 @@ export const updateAllNotifications = createAsyncThunk("post/updateAllNotificati
     }
     catch(err){
         console.log("Error updating notifications: ", err.message);
-        rejectWithValue(null);
+        return rejectWithValue(err.response.status);
     }
 })
 
@@ -82,7 +82,11 @@ const notificationSlice = createSlice({
 
         },
         [getNotificationsForUser.rejected] : (state, action) => {
-            state.status = "Rejected";
+            if(action.payload === 401){
+                state.status = "Idle";
+            }else{
+                state.status = "Rejected";
+            }
         },
 
         // mark all as read
@@ -102,7 +106,11 @@ const notificationSlice = createSlice({
             state.statusOfNotificationUpdate = "Fulfilled";
         },
         [updateAllNotifications.rejected] : (state, action) => {
-            state.statusOfNotificationUpdate = "Rejected";
+            if(action.payload === 401){
+                state.statusOfNotificationUpdate = "Idle";
+            }else{
+                state.statusOfNotificationUpdate = "Rejected";
+            }
         },
 
     }
